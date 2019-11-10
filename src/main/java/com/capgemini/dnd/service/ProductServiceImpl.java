@@ -181,43 +181,9 @@ public class ProductServiceImpl implements ProductService {
 		
 		int id = Integer.parseInt(productStock.getOrderId());
 		
-		boolean orderIdcheckInStock = false;
-		ProductStockEntity productStockEntity = null;
-
-		orderIdcheckInStock = doesProductOrderIdExistInStock(productStock.getOrderId());
-
-		if (orderIdcheckInStock == false) {
-			
-			Optional<ProductOrdersEntity> productOrderEntityObject = productOrderDAO.findById(id);
-			ProductOrdersEntity productOrderEntity = productOrderEntityObject.get();
-			System.out.println(productOrderEntity.getOrderId());
-			newEntryIntoProductStock(productOrderEntity.getOrderId());
-//			productStockEntity.setOrderId(productOrderEntity.getOrderId());
-			
-			Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(id);
-			productStockEntity = productStockEntityObject.get();
-			
-			productStockEntity.setName(productOrderEntity.getName());
-			productStockEntity.setPricePerUnit(productOrderEntity.getPricePerUnit());
-			productStockEntity.setQuantityValue(productOrderEntity.getQuantityValue());
-			productStockEntity.setQuantityUnit(productOrderEntity.getQuantityUnit());
-			productStockEntity.setTotalPrice(productOrderEntity.getTotalPrice());
-			productStockEntity.setWarehouseId(productOrderEntity.getWarehouseId());
-			productStockEntity.setDateofDelivery(productOrderEntity.getDateofDelivery());
-						
-			productStockEntity.setManufacturingDate(productStock.getManufacturingDate());
-			productStockEntity.setExpiryDate(productStock.getExpiryDate());
-			productStockEntity.setQualityCheck(productStock.getQualityCheck());
-
-			productStockDAO.saveAndFlush(productStockEntity);
-			String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
-			return jsonMessage;
-		}
 		
-		else {
-
 		Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(id);
-		productStockEntity = productStockEntityObject.get();
+		ProductStockEntity productStockEntity = productStockEntityObject.get();
 		
 		productStockEntity.setManufacturingDate(productStock.getManufacturingDate());
 		productStockEntity.setExpiryDate(productStock.getExpiryDate());
@@ -228,42 +194,26 @@ public class ProductServiceImpl implements ProductService {
 		String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
 		return jsonMessage;
 		
-		}
+		
 	}
 
-	@SuppressWarnings("null")
-	private void newEntryIntoProductStock(int orderId) {
+	
+	@SuppressWarnings({ "null", "unused" })
+	private void newEntryIntoProductStock(ProductStock productStock) {
 		
 		ProductStockEntity productStockEntity = null;
-		productStockEntity.setOrderId(orderId);
+		
+		productStockEntity.setName(productStock.getName());
+		productStockEntity.setPricePerUnit(productStock.getPrice_per_unit());
+		productStockEntity.setQuantityValue(productStock.getQuantityValue());
+		productStockEntity.setQuantityUnit(productStock.getQuantityUnit());
+		productStockEntity.setTotalPrice(productStock.getPrice());
+		productStockEntity.setWarehouseId(productStock.getWarehouseID());
+		productStockEntity.setDateofDelivery(productStock.getDeliveryDate());
+		
 		productStockDAO.saveAndFlush(productStockEntity);
 		
 		
 	}
 
-	@Override
-	public boolean doesProductOrderIdExistInStock(String orderId) {
-		
-		boolean productOrderIdFoundInStock = false;
-		
-		try {
-			Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(Integer.parseInt(orderId));
-			
-			if(productStockEntityObject.isPresent()) {
-				productOrderIdFoundInStock = true;
-				return productOrderIdFoundInStock;
-			}
-			
-			else {
-				logger.error(Constants.PRODUCT_ID_DOES_NOT_EXIST_IN_STOCK_EXCEPTION);
-				return productOrderIdFoundInStock;
-			}
-		}
-		
-		catch(NumberFormatException exception) {
-				logger.error(Constants.INVALID_INPUT_FORMAT);
-				return productOrderIdFoundInStock;
-			}
-			
 	}
-}
