@@ -74,6 +74,9 @@ public class Constants {
 	public static final Object SUPPLIER_IDS_FETCHED = "Supplier IDs fetched successfully";
 	public static final Object DISTRIBUTOR_IDS_FETCHED = "Distributor IDs fetched successfully";
 	public static final Object PRODUCT_ORDER_ADDED = "Product Order added successfully";
-	public static final Object RM_ORDER_ADDED = "Raw Material Order added successfully";;
+	public static final Object RM_ORDER_ADDED = "Raw Material Order added successfully";
+	public static final String INVALID_INPUT_FORMAT = "Enter valid numeric Order ID";
+	public static final String INVALID_MANUFACTURING_DATE = "You cant enter a future manufacturing date";
+	public static final String INVALID_EXPIRY_DATE = "You cant enter expiry date before manufacturing date";;
 	
 }

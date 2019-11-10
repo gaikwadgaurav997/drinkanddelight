@@ -13,18 +13,18 @@ public interface ProductService {
 
 	public String trackProductOrder(ProductStock productStock);
 
-//	public boolean doesProductOrderIdExist(String id) throws ProductOrderIDDoesNotExistException;
-//	
-//	boolean doesProductOrderIdExistInStock(String orderId);
-//
-//	public boolean exitDateCheck(ProductStock productStock) throws ExitDateException, IncompleteDataException;
-//
-//	public String updateExitDateinStock(ProductStock productStock);
-//
-//	public boolean validateManufacturingDate(Date manufacturing_date) throws ManufacturingDateException;
-//
-//	public boolean validateExpiryDate(Date manufacturing_date, Date expiry_date) throws ExpiryDateException;
-//
-//	public String updateProductStock(ProductStock productStock);
+	public boolean doesProductOrderIdExist(String id) throws ProductOrderIDDoesNotExistException;
+	
+	boolean doesProductOrderIdExistInStock(String orderId);
+
+	public boolean exitDateCheck(ProductStock productStock) throws ExitDateException, IncompleteDataException;
+
+	public String updateExitDateinStock(ProductStock productStock);
+
+	public boolean validateManufacturingDate(Date manufacturing_date) throws ManufacturingDateException;
+
+	public boolean validateExpiryDate(Date manufacturing_date, Date expiry_date) throws ExpiryDateException;
+
+	public String updateProductStock(ProductStock productStock);
 	
 }

@@ -32,117 +32,117 @@ public class ProductStockController {
 	@CrossOrigin(origins = "*")
 	@GetMapping("/ProductStock/TrackProduct/{id}")
 	public String trackProductOrder(@PathVariable("id") String id) {
-		System.out.println("in controller before service");
-//		try {
-//			productService.doesProductOrderIdExist(id);
+		
+		try {
+			productService.doesProductOrderIdExist(id);
 			String message = productService.trackProductOrder(new ProductStock(id));
-			System.out.println("in controller after service");
+			
 
 			return message;
-//		}
+		}
 		
-//		catch (ProductOrderIDDoesNotExistException exception) {
-//
-//				String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
-//				return errorJsonMessage;
-//			}
+		catch (ProductOrderIDDoesNotExistException exception) {
+
+				String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
+				return errorJsonMessage;
+			}
 		
 	}
 	
-//	@CrossOrigin(origins = "*")
-//	@PutMapping("/ProductStock/UpdateExitDate/{id}")
-//	public String updateExitDate(@PathVariable("id") String id,  @RequestBody Map<String, Object> paramMap) {
-//		
-//		String errorMessage = "";
-//		Date exitDate = null;
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//		
-//		String date = (String) paramMap.get("ExitDate");
-//
-//		try {
-//			productService.doesProductOrderIdExist(id);
-//			try {
-//				exitDate = sdf.parse(date);
-//				
-//			} catch (ParseException exception) {
-//				errorMessage = exception.getMessage();
-//			}
-//		} catch (ProductOrderIDDoesNotExistException exception) {
-//			errorMessage = exception.getMessage();
-//		}
-//
-//		try {
-//			if (errorMessage.isEmpty()) {
-//				if (productService.exitDateCheck(new ProductStock(id, exitDate))) {
-//					String exitDateJsonMessage = productService.updateExitDateinStock(new ProductStock(id, exitDate));
-//
-//					return exitDateJsonMessage;
-//
-//				}
-//			} else {
-//				String errorJsonMessage = JsonUtil.convertJavaToJson(errorMessage);
-//				return errorJsonMessage;
-//			}
-//		} catch (ExitDateException | IncompleteDataException exception) {
-//			errorMessage += exception.getMessage();
-//			String errorJsonMessage = JsonUtil.convertJavaToJson(errorMessage);
-//			return errorJsonMessage;		
-//			}
-//		return errorMessage;
-//	}
-//	
-//	@CrossOrigin(origins = "*")
-//	@PutMapping("/ProductStock/UpdateProductStockDetails/{id}")
-//	public String updateProductStockDetails(@PathVariable("id") String id,  @RequestBody Map<String, Object> paramMap) {
-//		
-//		
-//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//		String message = null;
-//
-//		Date manufacturingDate = null;
-//		Date expiryDate = null;
-//		
-//		String manDate = (String) paramMap.get("ManufacturingDate");
-//		String expDate = (String) paramMap.get("ExpiryDate");
-//		String qaStatus = (String) paramMap.get("QAStatus");
-//
-//		try {
-//			if (productService.doesProductOrderIdExist(id)) {
-//				try {
-//					manufacturingDate = sdf.parse(manDate);
-//					if (productService.validateManufacturingDate(manufacturingDate)) {
-//						try {
-//							expiryDate = sdf.parse(expDate);
-//							if (productService.validateExpiryDate(manufacturingDate, expiryDate)) {
-//								
-//								message = productService.updateProductStock(
-//										new ProductStock(id, manufacturingDate, expiryDate, qaStatus));
-//								return message;
-//
-//							}
-//						} catch (ParseException | ExpiryDateException exception) {
-//
-//							String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
-//							return errorJsonMessage;
-//
-//						}
-//					}
-//				} catch (ParseException | ManufacturingDateException exception) {
-//
-//					String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
-//					return errorJsonMessage;
-//
-//				}
-//			}
-//		} catch (ProductOrderIDDoesNotExistException exception) {
-//
-//			String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
-//			return errorJsonMessage;
-//
-//		}
-//		return message;
-//
-//	}
+	@CrossOrigin(origins = "*")
+	@PutMapping("/ProductStock/UpdateExitDate/{id}")
+	public String updateExitDate(@PathVariable("id") String id,  @RequestBody Map<String, Object> paramMap) {
+		
+		String errorMessage = "";
+		Date exitDate = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String date = (String) paramMap.get("ExitDate");
+
+		try {
+			productService.doesProductOrderIdExist(id);
+			try {
+				exitDate = sdf.parse(date);
+				
+			} catch (ParseException exception) {
+				errorMessage = exception.getMessage();
+			}
+		} catch (ProductOrderIDDoesNotExistException exception) {
+			errorMessage = exception.getMessage();
+		}
+
+		try {
+			if (errorMessage.isEmpty()) {
+				if (productService.exitDateCheck(new ProductStock(id, exitDate))) {
+					String exitDateJsonMessage = productService.updateExitDateinStock(new ProductStock(id, exitDate));
+
+					return exitDateJsonMessage;
+
+				}
+			} else {
+				String errorJsonMessage = JsonUtil.convertJavaToJson(errorMessage);
+				return errorJsonMessage;
+			}
+		} catch (ExitDateException | IncompleteDataException exception) {
+			errorMessage += exception.getMessage();
+			String errorJsonMessage = JsonUtil.convertJavaToJson(errorMessage);
+			return errorJsonMessage;		
+			}
+		return errorMessage;
+	}
+	
+	@CrossOrigin(origins = "*")
+	@PutMapping("/ProductStock/UpdateProductStockDetails/{id}")
+	public String updateProductStockDetails(@PathVariable("id") String id,  @RequestBody Map<String, Object> paramMap) {
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String message = null;
+
+		Date manufacturingDate = null;
+		Date expiryDate = null;
+		
+		String manDate  = (String) paramMap.get("ManufacturingDate");
+		String expDate  = (String) paramMap.get("ExpiryDate");
+		String qaStatus = (String) paramMap.get("QAStatus");
+
+		try {
+			if (productService.doesProductOrderIdExist(id)) {
+				try {
+					manufacturingDate = sdf.parse(manDate);
+					if (productService.validateManufacturingDate(manufacturingDate)) {
+						try {
+							expiryDate = sdf.parse(expDate);
+							if (productService.validateExpiryDate(manufacturingDate, expiryDate)) {
+								
+								message = productService.updateProductStock(
+										new ProductStock(id, manufacturingDate, expiryDate, qaStatus));
+								return message;
+
+							}
+						} catch (ParseException | ExpiryDateException exception) {
+
+							String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
+							return errorJsonMessage;
+
+						}
+					}
+				} catch (ParseException | ManufacturingDateException exception) {
+
+					String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
+					return errorJsonMessage;
+
+				}
+			}
+		} catch (ProductOrderIDDoesNotExistException exception) {
+
+			String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
+			return errorJsonMessage;
+
+		}
+		return message;
+
+	}
 
 		
 		
