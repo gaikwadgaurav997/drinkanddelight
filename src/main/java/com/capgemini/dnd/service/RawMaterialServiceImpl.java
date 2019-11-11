@@ -19,8 +19,10 @@ import com.capgemini.dnd.entity.RawMaterialStockEntity;
 import com.capgemini.dnd.util.JsonUtil;
 import com.capgemini.dnd.util.ServiceUtil;
 
+
 @Service
 public class RawMaterialServiceImpl implements RawMaterialService {
+
 
 	Logger logger = Logger.getRootLogger();
 
@@ -82,11 +84,13 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 			
 		}
 			
+
 	}
 
 	@Override
 	public boolean processDateCheck(RawMaterialStock rawMaterialStock)
 			throws ProcessDateException, IncompleteDataException {
+
 
 		boolean datecheck = false;
 		int id = Integer.parseInt(rawMaterialStock.getOrderId());
@@ -121,10 +125,12 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 			logger.error(Constants.INCOMPLETE_INFORMATION_IN_DATABASE);
 			throw new IncompleteDataException(Constants.INCOMPLETE_INFORMATION_IN_DATABASE);
 		}
+
 	}
 
 	@Override
 	public String updateProcessDateinStock(RawMaterialStock rawMaterialStock) {
+
 
 		int id = Integer.parseInt(rawMaterialStock.getOrderId());
 		
@@ -140,10 +146,12 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 		
 		return jsonMessage;
 		
+
 	}
 
 	@Override
 	public String updateRawMaterialStock(RawMaterialStock rawMaterialStock) {
+
 		
 		int id = Integer.parseInt(rawMaterialStock.getOrderId());
 		
@@ -159,6 +167,7 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 		
 		String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
 		return jsonMessage;
+
 	}
 	
 	@SuppressWarnings("null")
