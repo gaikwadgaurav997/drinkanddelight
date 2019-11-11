@@ -134,9 +134,9 @@ public class ProductServiceImpl implements ProductService {
         
             ProductStockEntity productStockEntity = productStockEntityObject.get();
         
+            try {
+            
             Date manufacturingDate = productStockEntity.getManufacturingDate();
-
- 
 
             Date expiryDate = productStockEntity.getExpiryDate();
 
@@ -150,6 +150,12 @@ public class ProductServiceImpl implements ProductService {
             else {
                 logger.error(Constants.EXIT_DATE_EXCEPTION);
                 throw new ExitDateException(Constants.EXIT_DATE_EXCEPTION);
+            }
+            
+            }
+            catch(NullPointerException exception) {
+                logger.error(Constants.INCOMPLETE_INFORMATION_UPDATE_DATABASE);
+                throw new IncompleteDataException(Constants.INCOMPLETE_INFORMATION_UPDATE_DATABASE);
             }
         
         }
