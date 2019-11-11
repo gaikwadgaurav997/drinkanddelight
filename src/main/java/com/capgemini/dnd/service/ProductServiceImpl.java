@@ -13,6 +13,7 @@ import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.ProductOrdersDAO;
 import com.capgemini.dnd.dao.ProductStockDAO;
+import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
 import com.capgemini.dnd.entity.ProductOrdersEntity;
 import com.capgemini.dnd.entity.ProductStockEntity;
@@ -166,22 +167,43 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	
-	@SuppressWarnings({ "null", "unused" })
-	private void newEntryIntoProductStock(ProductStock productStock) {
+	@SuppressWarnings("null")
+	private void newEntryIntoProductStock(ProductOrder productOrder) {
 		
 		ProductStockEntity productStockEntity = null;
 		
-		productStockEntity.setName(productStock.getName());
-		productStockEntity.setPricePerUnit(productStock.getPrice_per_unit());
-		productStockEntity.setQuantityValue(productStock.getQuantityValue());
-		productStockEntity.setQuantityUnit(productStock.getQuantityUnit());
-		productStockEntity.setTotalPrice(productStock.getPrice());
-		productStockEntity.setWarehouseId(productStock.getWarehouseID());
-		productStockEntity.setDateofDelivery(productStock.getDeliveryDate());
+		productStockEntity.setName(productOrder.getName());
+		productStockEntity.setPricePerUnit(productOrder.getPricePerUnit());
+		productStockEntity.setQuantityValue(productOrder.getQuantityValue());
+		productStockEntity.setQuantityUnit(productOrder.getQuantityUnit());
+		productStockEntity.setTotalPrice(productOrder.getTotalPrice());
+		productStockEntity.setWarehouseId(productOrder.getWarehouseId());
+		productStockEntity.setDateofDelivery(productOrder.getDateofDelivery());
 		
 		productStockDAO.saveAndFlush(productStockEntity);
 		
-		
 	}
+	
+	@SuppressWarnings("null")
+	@Override
+	public void addProductOrder(ProductOrder productOrder) {
 
+	ProductOrdersEntity productOrdersEntity = null;
+	
+	productOrdersEntity.setName(productOrder.getName());
+	productOrdersEntity.setDistributorId(productOrder.getDistributorId());
+	productOrdersEntity.setQuantityValue(productOrder.getQuantityValue());
+	productOrdersEntity.setQuantityUnit(productOrder.getQuantityUnit());
+	productOrdersEntity.setDateOfOrder(productOrder.getDateOfOrder());
+	productOrdersEntity.setDateofDelivery(productOrder.getDateofDelivery());
+	productOrdersEntity.setPricePerUnit(productOrder.getPricePerUnit());
+	productOrdersEntity.setTotalPrice(productOrder.getTotalPrice());
+	productOrdersEntity.setDeliveryStatus(productOrder.getDeliveryStatus());
+	productOrdersEntity.setWarehouseId(productOrder.getWarehouseId());
+
+	productOrderDAO.saveAndFlush(productOrdersEntity);
+	
+	newEntryIntoProductStock(productOrder);
+	
+	}
 	}
