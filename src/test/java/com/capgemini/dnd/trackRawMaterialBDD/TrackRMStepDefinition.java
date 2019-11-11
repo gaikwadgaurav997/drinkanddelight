@@ -120,7 +120,7 @@ public class TrackRMStepDefinition {
 		
 		String outputValue = outputElement.getText();
 		
-		Assert.assertEquals("The order ID had been in the warehouse with warehouseID = w02 from 2019-07-17 05:30:00.0 to 2019-10-22 05:30:00.0(97 days)",outputValue);
+		Assert.assertEquals("The order ID had been in the warehouse with warehouseID = w02 from 2019-07-17 05:30:00.0 to 2019-10-30 05:30:00.0(105 days)",outputValue);
 	}
 
 	@Then("A message {string} is displayed in the blank space below")
