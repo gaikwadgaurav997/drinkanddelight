@@ -233,11 +233,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String addProductOrder(ProductOrder productOrder) {
 
- 
-    
-    System.out.println(productOrder);
-    String n = productOrder.getName();
-    productOrdersEntity.setName(n);
+    productOrdersEntity.setName(productOrder.getName());
     productOrdersEntity.setDistributorId(productOrder.getDistributorId());
     productOrdersEntity.setQuantityValue(productOrder.getQuantityValue());
     productOrdersEntity.setQuantityUnit(productOrder.getQuantityUnit());
@@ -249,14 +245,10 @@ public class ProductServiceImpl implements ProductService {
     productOrdersEntity.setDeliveryStatus(productOrder.getDeliveryStatus());
     productOrdersEntity.setWarehouseId(productOrder.getWarehouseId());
 
- 
-
     productOrderDAO.saveAndFlush(productOrdersEntity);
-    
     newEntryIntoProductStock(productOrder);
     
     String jsonMessage = JsonUtil.convertJavaToJson(Constants.PRODUCT_ORDER_ADDED);
-    
     return jsonMessage;
     
     }
