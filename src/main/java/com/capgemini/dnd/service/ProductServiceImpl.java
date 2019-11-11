@@ -3,15 +3,12 @@ package com.capgemini.dnd.service;
 import java.util.Date;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import org.apache.log4j.Logger;
-
 import com.capgemini.dnd.customexceptions.ExitDateException;
-import com.capgemini.dnd.customexceptions.ExpiryDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
-import com.capgemini.dnd.customexceptions.ManufacturingDateException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.ProductOrdersDAO;
@@ -144,36 +141,7 @@ public class ProductServiceImpl implements ProductService {
 		return jsonMessage;
 	}
 	
-	@Override
-	public boolean validateManufacturingDate(Date manufacturing_date) throws ManufacturingDateException {
-		boolean datecheck = false;
-		Date today = new Date();
-		if (manufacturing_date.before(today)) {
-			datecheck = true;
-			return datecheck;
-		}
-		else {
-			logger.error(Constants.INVALID_MANUFACTURING_DATE);
-			throw new ManufacturingDateException(Constants.INVALID_MANUFACTURING_DATE);
-		}
-	}
-
-	@Override
-	public boolean validateExpiryDate(Date manufacturing_date, Date expiry_date) throws ExpiryDateException {
-		
-		boolean datecheck = false;
-		
-		if (expiry_date.after(manufacturing_date)) {
-			datecheck = true;
-			return datecheck;
-		}
-		else {
-			logger.error(Constants.INVALID_EXPIRY_DATE);
-			throw new ExpiryDateException(Constants.INVALID_EXPIRY_DATE);
-		}
-		
-	}
-
+	
 	
 	@Override
 	public String updateProductStock(ProductStock productStock) {

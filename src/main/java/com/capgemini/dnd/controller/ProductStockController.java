@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.capgemini.dnd.util.JsonUtil;
+import com.capgemini.dnd.util.ServiceUtil;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.ExpiryDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
@@ -110,10 +111,10 @@ public class ProductStockController {
 			if (productService.doesProductOrderIdExist(id)) {
 				try {
 					manufacturingDate = sdf.parse(manDate);
-					if (productService.validateManufacturingDate(manufacturingDate)) {
+					if (ServiceUtil.validateManufacturingDate(manufacturingDate)) {
 						try {
 							expiryDate = sdf.parse(expDate);
-							if (productService.validateExpiryDate(manufacturingDate, expiryDate)) {
+							if (ServiceUtil.validateExpiryDate(manufacturingDate, expiryDate)) {
 								
 								message = productService.updateProductStock(
 										new ProductStock(id, manufacturingDate, expiryDate, qaStatus));
