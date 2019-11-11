@@ -208,7 +208,7 @@ public class ProductServiceImpl implements ProductService {
 
     
     @SuppressWarnings("null")
-    private void newEntryIntoProductStock(ProductOrder productOrder) {
+    public void newEntryIntoProductStock(ProductOrder productOrder) {
         
         ProductStockEntity productStockEntity = null;
         

@@ -13,6 +13,7 @@ import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.RawMaterialOrdersDAO;
 import com.capgemini.dnd.dao.RawMaterialStockDAO;
+import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
 import com.capgemini.dnd.entity.RawMaterialStockEntity;
@@ -171,21 +172,21 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 	}
 	
 	@SuppressWarnings("null")
-	public void newEntryIntoRawMaterialStock(RawMaterialStock rawMaterialStock) {
-		
-		RawMaterialStockEntity rawMaterialStockEntity = null;
-		
-		rawMaterialStockEntity.setName(rawMaterialStock.getName());
-		rawMaterialStockEntity.setPricePerUnit(rawMaterialStock.getPrice_per_unit());
-		rawMaterialStockEntity.setQuantityValue(rawMaterialStock.getQuantityValue());
-		rawMaterialStockEntity.setQuantityUnit(rawMaterialStock.getQuantityUnit());
-		rawMaterialStockEntity.setTotalPrice(rawMaterialStock.getPrice());
-		rawMaterialStockEntity.setWarehouseId(rawMaterialStock.getWarehouseID());
-		rawMaterialStockEntity.setDateofDelivery(rawMaterialStock.getDeliveryDate());
-		
-		rawMaterialStockDAO.saveAndFlush(rawMaterialStockEntity);
-		
-	}
+    public void newEntryIntoRawMaterialStock(RawMaterialOrder rawMaterialOrder) {
+        
+        RawMaterialStockEntity rawMaterialStockEntity = null;
+        
+        rawMaterialStockEntity.setName(rawMaterialOrder.getName());
+        rawMaterialStockEntity.setPricePerUnit(rawMaterialOrder.getPricePerUnit());
+        rawMaterialStockEntity.setQuantityValue(rawMaterialOrder.getQuantityValue());
+        rawMaterialStockEntity.setQuantityUnit(rawMaterialOrder.getQuantityUnit());
+        rawMaterialStockEntity.setTotalPrice(rawMaterialOrder.getTotalPrice());
+        rawMaterialStockEntity.setWarehouseId(rawMaterialOrder.getWarehouseId());
+        rawMaterialStockEntity.setDateofDelivery(rawMaterialOrder.getDateOfDelivery());
+        
+        rawMaterialStockDAO.saveAndFlush(rawMaterialStockEntity);
+        
+    }
 
 
 }
