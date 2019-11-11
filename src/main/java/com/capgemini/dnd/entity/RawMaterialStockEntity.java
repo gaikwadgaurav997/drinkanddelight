@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.stereotype.Component;
+
+@Component
 @Entity
 @Table(name = "RMStock")
 public class RawMaterialStockEntity {
@@ -152,11 +155,4 @@ public class RawMaterialStockEntity {
 	public void setQualityCheck(String qualityCheck) {
 		this.qualityCheck = qualityCheck;
 	}
-
-	/*
-	 * public RawMaterialStockEntity() {
-	 * 
-	 * }
-	 */
-
 }

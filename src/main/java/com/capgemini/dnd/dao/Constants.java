@@ -77,6 +77,7 @@ public class Constants {
 	public static final Object RM_ORDER_ADDED = "Raw Material Order added successfully";
 	public static final String INVALID_INPUT_FORMAT = "Enter valid numeric Order ID";
 	public static final String INVALID_MANUFACTURING_DATE = "You cant enter a future manufacturing date";
-	public static final String INVALID_EXPIRY_DATE = "You cant enter expiry date before manufacturing date";;
+	public static final String INVALID_EXPIRY_DATE = "You cant enter expiry date before manufacturing date";
+	public static final String INCOMPLETE_INFORMATION_UPDATE_DATABASE = "Data Incomplete....Update the Information in Database";
 	
 }
