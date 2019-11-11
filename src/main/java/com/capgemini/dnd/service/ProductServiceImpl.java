@@ -97,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
 		if(productStockEntityObject.isPresent()) {
 		
 			ProductStockEntity productStockEntity = productStockEntityObject.get();
-		
+		try {
 			Date manufacturingDate = productStockEntity.getManufacturingDate();
 
 			Date expiryDate = productStockEntity.getExpiryDate();
@@ -111,6 +111,11 @@ public class ProductServiceImpl implements ProductService {
 				logger.error(Constants.EXIT_DATE_EXCEPTION);
 				throw new ExitDateException(Constants.EXIT_DATE_EXCEPTION);
 			}
+		}
+		catch(NullPointerException exception) {
+			logger.error(Constants.INCOMPLETE_INFORMATION_UPDATE_DATABASE);
+			throw new IncompleteDataException(Constants.INCOMPLETE_INFORMATION_UPDATE_DATABASE);
+		}
 		
 		}
 		
@@ -166,8 +171,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	
-	@SuppressWarnings({ "null", "unused" })
-	private void newEntryIntoProductStock(ProductStock productStock) {
+	@SuppressWarnings("null")
+	public void newEntryIntoProductStock(ProductStock productStock) {
 		
 		ProductStockEntity productStockEntity = null;
 		

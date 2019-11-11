@@ -99,8 +99,8 @@ public class RawMaterialStockController {
 		Date manufacturingDate = null;
 		Date expiryDate = null;
 		
-		String manDate = (String) paramMap.get("ManufacturingDate");
-		String expDate = (String) paramMap.get("ExpiryDate");
+		String manDate  = (String) paramMap.get("ManufacturingDate");
+		String expDate  = (String) paramMap.get("ExpiryDate");
 		String qaStatus = (String) paramMap.get("QAStatus");
 
 		try {
