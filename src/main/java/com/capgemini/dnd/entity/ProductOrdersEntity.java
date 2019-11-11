@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.springframework.stereotype.Component;
+
+@Component
 @Entity
 @Table(name = "ProductOrders", uniqueConstraints = {
 		@UniqueConstraint(columnNames = "orderId"),

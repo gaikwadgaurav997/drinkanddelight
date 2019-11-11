@@ -18,6 +18,6 @@ public interface ProductService {
 
 	public String updateProductStock(ProductStock productStock);
 
-	public void addProductOrder(ProductOrder productOrder);
+	public String addProductOrder(ProductOrder productOrder);
 	
 }

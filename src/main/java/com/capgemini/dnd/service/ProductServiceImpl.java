@@ -44,8 +44,13 @@ public class ProductServiceImpl implements ProductService {
     
     @Autowired
     private ProductOrdersDAO productOrderDAO;
-
- 
+    
+    @Autowired
+    ProductOrdersEntity productOrdersEntity;
+    
+    @Autowired
+    ProductStockEntity productStockEntity;
+     
 
     @Override
     public String trackProductOrder(ProductStock productStock) {
@@ -210,7 +215,7 @@ public class ProductServiceImpl implements ProductService {
     @SuppressWarnings("null")
     public void newEntryIntoProductStock(ProductOrder productOrder) {
         
-        ProductStockEntity productStockEntity = null;
+       
         
         productStockEntity.setName(productOrder.getName());
         productStockEntity.setPricePerUnit(productOrder.getPricePerUnit());
@@ -226,19 +231,20 @@ public class ProductServiceImpl implements ProductService {
     
     @SuppressWarnings("null")
     @Override
-    public void addProductOrder(ProductOrder productOrder) {
+    public String addProductOrder(ProductOrder productOrder) {
 
  
-
-    ProductOrdersEntity productOrdersEntity = null;
     
-    productOrdersEntity.setName(productOrder.getName());
+    System.out.println(productOrder);
+    String n = productOrder.getName();
+    productOrdersEntity.setName(n);
     productOrdersEntity.setDistributorId(productOrder.getDistributorId());
     productOrdersEntity.setQuantityValue(productOrder.getQuantityValue());
     productOrdersEntity.setQuantityUnit(productOrder.getQuantityUnit());
     productOrdersEntity.setDateOfOrder(productOrder.getDateOfOrder());
     productOrdersEntity.setDateofDelivery(productOrder.getDateofDelivery());
     productOrdersEntity.setPricePerUnit(productOrder.getPricePerUnit());
+    productOrdersEntity.setTotalPrice(productOrder.getQuantityValue()*productOrder.getPricePerUnit());
     productOrdersEntity.setTotalPrice(productOrder.getTotalPrice());
     productOrdersEntity.setDeliveryStatus(productOrder.getDeliveryStatus());
     productOrdersEntity.setWarehouseId(productOrder.getWarehouseId());
@@ -248,6 +254,10 @@ public class ProductServiceImpl implements ProductService {
     productOrderDAO.saveAndFlush(productOrdersEntity);
     
     newEntryIntoProductStock(productOrder);
+    
+    String jsonMessage = JsonUtil.convertJavaToJson(Constants.PRODUCT_ORDER_ADDED);
+    
+    return jsonMessage;
     
     }
     }
