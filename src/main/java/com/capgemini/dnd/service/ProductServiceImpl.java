@@ -19,8 +19,6 @@ import com.capgemini.dnd.entity.ProductStockEntity;
 import com.capgemini.dnd.util.JsonUtil;
 import com.capgemini.dnd.util.ServiceUtil;
 
-
-
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -28,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductStockDAO productStockDAO;
-	
+
 	@Autowired
 	private ProductOrdersDAO productOrderDAO;
 
@@ -36,11 +34,11 @@ public class ProductServiceImpl implements ProductService {
 	public String trackProductOrder(ProductStock productStock) {
 
 		int id = Integer.parseInt(productStock.getOrderId());
-		
+
 		Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(id);
-		
+
 		ProductStockEntity productStockEntity = productStockEntityObject.get();
-		
+
 		Date exitDate = productStockEntity.getExitDate();
 
 		Date manDate = productStockEntity.getManufacturingDate();
@@ -54,50 +52,50 @@ public class ProductServiceImpl implements ProductService {
 		String message = "The order ID had been in the warehouse with warehouseID = " + warehouseId + " from "
 				+ manDate.toString() + " to " + exitDate.toString() + "("
 				+ ServiceUtil.diffBetweenDays(exitDate, manDate) + " days)";
-		
+
 		String jsonMessage = JsonUtil.convertJavaToJson(message);
-		
+
 		return jsonMessage;
-		
+
 	}
 
 	@Override
 	public boolean doesProductOrderIdExist(String orderId) throws ProductOrderIDDoesNotExistException {
 
 		boolean productOrderIdFound = false;
-		
+
 		try {
-		Optional<ProductOrdersEntity> productOrderEntityObject = productOrderDAO.findById(Integer.parseInt(orderId));
-		
-		if(productOrderEntityObject.isPresent()) {
-			productOrderIdFound = true;
-			return productOrderIdFound;
-		}
-		
-		else {
-			logger.error(Constants.PRODUCT_ID_DOES_NOT_EXISTS_EXCEPTION);
-			
-			throw new ProductOrderIDDoesNotExistException(Constants.PRODUCT_ID_DOES_NOT_EXISTS_EXCEPTION);
-		}
-		}
-		catch(NumberFormatException exception) {
+			Optional<ProductOrdersEntity> productOrderEntityObject = productOrderDAO
+					.findById(Integer.parseInt(orderId));
+
+			if (productOrderEntityObject.isPresent()) {
+				productOrderIdFound = true;
+				return productOrderIdFound;
+			}
+
+			else {
+				logger.error(Constants.PRODUCT_ID_DOES_NOT_EXISTS_EXCEPTION);
+
+				throw new ProductOrderIDDoesNotExistException(Constants.PRODUCT_ID_DOES_NOT_EXISTS_EXCEPTION);
+			}
+		} catch (NumberFormatException exception) {
 			logger.error(Constants.INVALID_INPUT_FORMAT);
 			throw new ProductOrderIDDoesNotExistException(Constants.INVALID_INPUT_FORMAT);
 		}
-			
+
 	}
 
 	@Override
 	public boolean exitDateCheck(ProductStock productStock) throws ExitDateException, IncompleteDataException {
-		
+
 		boolean datecheck = false;
 		int id = Integer.parseInt(productStock.getOrderId());
-		
+
 		Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(id);
-		if(productStockEntityObject.isPresent()) {
-		
+		if (productStockEntityObject.isPresent()) {
+
 			ProductStockEntity productStockEntity = productStockEntityObject.get();
-		
+
 			Date manufacturingDate = productStockEntity.getManufacturingDate();
 
 			Date expiryDate = productStockEntity.getExpiryDate();
@@ -106,71 +104,63 @@ public class ProductServiceImpl implements ProductService {
 				datecheck = true;
 				return datecheck;
 			}
-			
+
 			else {
 				logger.error(Constants.EXIT_DATE_EXCEPTION);
 				throw new ExitDateException(Constants.EXIT_DATE_EXCEPTION);
 			}
-		
+
 		}
-		
+
 		else {
 			logger.error(Constants.INCOMPLETE_INFORMATION_IN_DATABASE);
 			throw new IncompleteDataException(Constants.INCOMPLETE_INFORMATION_IN_DATABASE);
 		}
-		
-		
+
 	}
 
 	@Override
 	public String updateExitDateinStock(ProductStock productStock) {
-		
-		
+
 		int id = Integer.parseInt(productStock.getOrderId());
-		
+
 		Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(id);
-		
+
 		ProductStockEntity productStockEntity = productStockEntityObject.get();
-		
+
 		productStockEntity.setExitDate(productStock.getExitDate());
-		
+
 		productStockDAO.saveAndFlush(productStockEntity);
-		
+
 		String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
-		
+
 		return jsonMessage;
 	}
-	
-	
-	
+
 	@Override
 	public String updateProductStock(ProductStock productStock) {
-		
-		
+
 		int id = Integer.parseInt(productStock.getOrderId());
-		
-		
+
 		Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(id);
 		ProductStockEntity productStockEntity = productStockEntityObject.get();
-		
+
 		productStockEntity.setManufacturingDate(productStock.getManufacturingDate());
 		productStockEntity.setExpiryDate(productStock.getExpiryDate());
 		productStockEntity.setQualityCheck(productStock.getQualityCheck());
 
 		productStockDAO.saveAndFlush(productStockEntity);
-				
+
 		String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
 		return jsonMessage;
-		
-		
+
 	}
 
-	
 	@SuppressWarnings({ "null", "unused" })
 	private void newEntryIntoProductStock(ProductStock productStock) {
-		
+
 		ProductStockEntity productStockEntity = null;
-		
+
 		productStockEntity.setName(productStock.getName());
 		productStockEntity.setPricePerUnit(productStock.getPrice_per_unit());
 		productStockEntity.setQuantityValue(productStock.getQuantityValue());
@@ -178,10 +168,9 @@ public class ProductServiceImpl implements ProductService {
 		productStockEntity.setTotalPrice(productStock.getPrice());
 		productStockEntity.setWarehouseId(productStock.getWarehouseID());
 		productStockEntity.setDateofDelivery(productStock.getDeliveryDate());
-		
+
 		productStockDAO.saveAndFlush(productStockEntity);
-		
-		
-	}
 
 	}
+
+}

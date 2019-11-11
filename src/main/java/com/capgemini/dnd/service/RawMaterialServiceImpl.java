@@ -1,14 +1,9 @@
 package com.capgemini.dnd.service;
 
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.capgemini.dnd.customexceptions.ExpiryDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
-import com.capgemini.dnd.customexceptions.ManufacturingDateException;
 import com.capgemini.dnd.customexceptions.ProcessDateException;
 import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
 import com.capgemini.dnd.dto.RawMaterialStock;
