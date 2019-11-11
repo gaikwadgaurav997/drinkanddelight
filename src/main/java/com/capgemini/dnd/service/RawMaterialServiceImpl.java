@@ -13,7 +13,6 @@ import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.RawMaterialOrdersDAO;
 import com.capgemini.dnd.dao.RawMaterialStockDAO;
-import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
 import com.capgemini.dnd.entity.RawMaterialStockEntity;
@@ -233,24 +232,4 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 		
 	}
 	
-	@SuppressWarnings("null")
-    public void newEntryIntoRawMaterialStock(RawMaterialOrder rawMaterialOrder) {
-        
-        RawMaterialStockEntity rawMaterialStockEntity = null;
-        
-        rawMaterialStockEntity.setName(rawMaterialOrder.getName());
-        rawMaterialStockEntity.setPricePerUnit(rawMaterialOrder.getPricePerUnit());
-        rawMaterialStockEntity.setQuantityValue(rawMaterialOrder.getQuantityValue());
-        rawMaterialStockEntity.setQuantityUnit(rawMaterialOrder.getQuantityUnit());
-        rawMaterialStockEntity.setTotalPrice(rawMaterialOrder.getTotalPrice());
-        rawMaterialStockEntity.setWarehouseId(rawMaterialOrder.getWarehouseId());
-        rawMaterialStockEntity.setDateofDelivery(rawMaterialOrder.getDateOfDelivery());
-        
-        rawMaterialStockDAO.saveAndFlush(rawMaterialStockEntity);
-        
-    }
-	
-	
-
-
 }
