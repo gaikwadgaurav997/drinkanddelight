@@ -17,6 +17,8 @@ public interface RawMaterialService {
 
 	public String updateProcessDateinStock(RawMaterialStock rawMaterialStock);
 
-	public String updateRawMaterialStock(RawMaterialStock rawMaterialStock);	
+	public String updateRawMaterialStock(RawMaterialStock rawMaterialStock);
+
+	public boolean doesRawMaterialOrderIdExistInStock(String orderId);	
 }
 

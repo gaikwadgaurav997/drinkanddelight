@@ -32,6 +32,12 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 	
 	@Autowired
 	private RawMaterialOrdersDAO rawMaterialOrderDAO;
+	
+	@Autowired
+	RawMaterialStockEntity rawMaterialStockEntity;
+	
+	@Autowired
+	RawMaterialOrderEntity rawMaterialOrderEntity;
 
 	@Override
 	public String trackRawMaterialOrder(RawMaterialStock rawMaterialStock) {
@@ -156,6 +162,36 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 		
 		int id = Integer.parseInt(rawMaterialStock.getOrderId());
 		
+		boolean orderIdcheckInStock = false;
+
+		orderIdcheckInStock = doesRawMaterialOrderIdExistInStock(rawMaterialStock.getOrderId());
+
+		if (orderIdcheckInStock == false) {
+			
+			Optional<RawMaterialOrderEntity> rawMaterialOrderEntityObject = rawMaterialOrderDAO.findById(id);
+	        RawMaterialOrderEntity rawMaterialOrderEntity = rawMaterialOrderEntityObject.get();
+			
+		     	rawMaterialStockEntity.setOrderId(rawMaterialOrderEntity.getOrderId());
+	        	rawMaterialStockEntity.setName(rawMaterialOrderEntity.getName());
+		        rawMaterialStockEntity.setPricePerUnit(rawMaterialOrderEntity.getPricePerUnit());
+		        rawMaterialStockEntity.setQuantityValue(rawMaterialOrderEntity.getQuantityValue());
+		        rawMaterialStockEntity.setQuantityUnit(rawMaterialOrderEntity.getQuantityUnit());
+		        rawMaterialStockEntity.setTotalPrice(rawMaterialOrderEntity.getTotalPrice());
+		        rawMaterialStockEntity.setWarehouseId(rawMaterialOrderEntity.getWarehouseId());
+		        rawMaterialStockEntity.setDateofDelivery(rawMaterialOrderEntity.getDateOfDelivery());
+		        
+		        rawMaterialStockEntity.setManufacturingDate(rawMaterialStock.getManufacturingDate());
+				rawMaterialStockEntity.setExpiryDate(rawMaterialStock.getExpiryDate());
+				rawMaterialStockEntity.setQualityCheck(rawMaterialStock.getQualityCheck());
+		        
+		        rawMaterialStockDAO.saveAndFlush(rawMaterialStockEntity);
+                
+		        String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
+		        return jsonMessage;
+			
+		}
+		
+		else {
 		Optional<RawMaterialStockEntity> rawMaterialStockEntityObject = rawMaterialStockDAO.findById(id);
 		
 		RawMaterialStockEntity rawMaterialStockEntity = rawMaterialStockEntityObject.get();
@@ -168,7 +204,33 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 		
 		String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
 		return jsonMessage;
+		}
 
+	}
+	
+    @Override
+	public boolean doesRawMaterialOrderIdExistInStock(String orderId) {
+
+		boolean rawMaterialOrderIdFound = false;
+		try {
+	        Optional<RawMaterialStockEntity> rawMaterialStockEntityObject = rawMaterialStockDAO.findById(Integer.parseInt(orderId));
+	        
+	        if(rawMaterialStockEntityObject.isPresent()) {
+	            rawMaterialOrderIdFound = true;
+	            return rawMaterialOrderIdFound;
+	        }
+	        
+	        else {
+	            logger.error(Constants.RAWMATERIAL_ID_DOES_NOT_EXIST_IN_STOCK_EXCEPTION);
+	            return rawMaterialOrderIdFound;
+	            
+	        }
+	        }
+	        catch(NumberFormatException exception) {
+	        	logger.error(Constants.INVALID_INPUT_FORMAT);
+	        	return rawMaterialOrderIdFound;
+	        }
+		
 	}
 	
 	@SuppressWarnings("null")
@@ -187,6 +249,8 @@ public class RawMaterialServiceImpl implements RawMaterialService {
         rawMaterialStockDAO.saveAndFlush(rawMaterialStockEntity);
         
     }
+	
+	
 
 
 }
