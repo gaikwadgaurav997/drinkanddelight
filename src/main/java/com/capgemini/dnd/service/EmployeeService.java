@@ -15,7 +15,7 @@ public interface EmployeeService {
 	
 	public boolean login(Employee employee) throws UnregisteredEmployeeException, WrongPasswordException, BackEndException;
 	
-	boolean employeeExists(Employee employee) throws BackEndException, RowNotFoundException;
+	boolean employeeExists(Employee employee) throws UnregisteredEmployeeException;
 
 	Employee fetchOneConfidentialDetail(Employee employee) throws BackEndException;
 

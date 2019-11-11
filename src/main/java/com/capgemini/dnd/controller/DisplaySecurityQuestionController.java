@@ -15,43 +15,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.capgemini.dnd.customexceptions.BackEndException;
 import com.capgemini.dnd.dto.Employee;
 import com.capgemini.dnd.service.EmployeeService;
+import com.capgemini.dnd.util.JsonUtil;
 import com.capgemini.dnd.util.MappingUtil;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Controller
 @CrossOrigin(origins = "*")
-@RequestMapping("/")
-public class LoginController {
+@RequestMapping("/display-question")
+public class DisplaySecurityQuestionController {
 	@Autowired
 	private EmployeeService employeeService;
 
 	private Employee employee = null;
 
+	private Employee idealEmployee = null;
+
 	@RequestMapping(method = RequestMethod.POST)
-	public void login(HttpServletRequest request, HttpServletResponse response)
+	public void getSecurityQuestion(HttpServletRequest request, HttpServletResponse response)
 			throws BackEndException, JsonParseException, JsonMappingException, IOException {
 		Map<String, String> fieldValueMap = MappingUtil.convertJsonObjectToFieldValueMap(request);
 		
 		employee = new Employee();
 		employee.setUsername(fieldValueMap.get("username"));
-		employee.setPassword(fieldValueMap.get("password"));
-		
-		System.out.println(request.getParameter("username") + request.getParameter("password"));
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode dataResponse = mapper.createObjectNode();
 		try {
-			System.out.println("ckskcnsdfkv " + employeeService.login(employee));
-			if (employeeService.login(employee)) {
-				((ObjectNode) dataResponse).put("message", ControllerConstants.LOGIN_SUCCESSFUL_MESSAGE);
-				((ObjectNode) dataResponse).put("username", employee.getUsername());
-			}
+			idealEmployee = new Employee();
+			idealEmployee = employeeService.fetchOneConfidentialDetail(employee);
+			String jsonQuestion = JsonUtil.convertJavaToJson(idealEmployee.getSecurityQuestion());
+			response.getWriter().write(jsonQuestion);
 		} catch (Exception exception) {
-			((ObjectNode) dataResponse).put("message", exception.getMessage());
+			String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
+			response.getWriter().write(errorJsonMessage);
 		}
-		response.getWriter().print(dataResponse);
 	}
 }

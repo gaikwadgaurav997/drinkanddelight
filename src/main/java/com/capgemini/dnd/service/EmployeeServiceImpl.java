@@ -53,8 +53,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public boolean employeeExists(Employee employee) throws BackEndException, RowNotFoundException {
-		return employeeDAO.existsByUserName(employee.getUsername());
+	public boolean employeeExists(Employee employee) throws UnregisteredEmployeeException {
+		boolean employeeExists=false;
+		if(employeeDAO.existsByUserName(employee.getUsername()))
+			employeeExists=true;
+		else {
+			logger.error(Constants.LOGGER_ERROR_MESSAGE_UNREGISTERED_USER);
+			throw new UnregisteredEmployeeException(Constants.LOGGER_ERROR_MESSAGE_UNREGISTERED_USER);
+		}
+		return employeeExists;
 	}
 
 	/*******************************************************************************************************
