@@ -2,7 +2,9 @@ package com.capgemini.dnd.service;
 
  
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
  
@@ -18,12 +20,18 @@ import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
 import com.capgemini.dnd.customexceptions.UpdateException;
 import com.capgemini.dnd.dao.Constants;
+import com.capgemini.dnd.dao.DistributorDAO;
 import com.capgemini.dnd.dao.ProductOrdersDAO;
 import com.capgemini.dnd.dao.ProductStockDAO;
+import com.capgemini.dnd.dao.WarehouseDAO;
+import com.capgemini.dnd.dao.ProductSpecsDAO;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
+import com.capgemini.dnd.entity.DistributorEntity;
 import com.capgemini.dnd.entity.ProductOrdersEntity;
+import com.capgemini.dnd.entity.ProductSpecsEntity;
 import com.capgemini.dnd.entity.ProductStockEntity;
+import com.capgemini.dnd.entity.WarehouseEntity;
 import com.capgemini.dnd.util.JsonUtil;
 import com.capgemini.dnd.util.ServiceUtil;
 
@@ -47,12 +55,29 @@ public class ProductServiceImpl implements ProductService {
     private ProductOrdersDAO productOrderDAO;
     
     @Autowired
+    private ProductSpecsDAO productSpecsDAO;
+    
+    @Autowired
+    private DistributorDAO distributorDAO;
+    
+    @Autowired
+    private WarehouseDAO warehouseDAO;
+    
+    @Autowired
     ProductOrdersEntity productOrdersEntity;
     
     @Autowired
     ProductStockEntity productStockEntity;
-     
-
+    
+    @Autowired
+    ProductSpecsEntity productSpecsEntity;
+    
+    @Autowired
+    DistributorEntity distributorEntity;
+    
+    @Autowired
+    WarehouseEntity warehouseEntity;
+    
     @Override
     public String trackProductOrder(ProductStock productStock) {
 
@@ -316,6 +341,45 @@ public class ProductServiceImpl implements ProductService {
             } catch (UpdateException ex) {
                 return ex.getMessage();
             }
-        } 
-    
-    }
+        }
+
+
+
+
+	@Override
+	public ArrayList<String> fetchProductNames() {
+		ArrayList<String> productNamesList = new ArrayList<String>();
+		List<ProductSpecsEntity> productSpecsEntityObject = productSpecsDAO.findAll();
+		
+		for (ProductSpecsEntity productSpecsEntity : productSpecsEntityObject) {
+			productNamesList.add(productSpecsEntity.getName());
+		}
+		
+		return productNamesList;
+	}
+	
+	@Override
+	public ArrayList<String> fetchDistributorIds() {
+		ArrayList<String> distributorNamesList = new ArrayList<String>();
+		List<DistributorEntity> distributorEntityObject = distributorDAO.findAll();
+		
+		for (DistributorEntity distributorEntity : distributorEntityObject) {
+			distributorNamesList.add(distributorEntity.getDistributorId());
+		}
+		
+		return distributorNamesList;
+	}
+
+	@Override
+	public ArrayList<String> fetchWarehouseIds() {
+		ArrayList<String> warehouseIdsList = new ArrayList<String>();
+		List<WarehouseEntity> warehouseEntityObject = warehouseDAO.findAll();
+		
+		for (WarehouseEntity warehouseEntity : warehouseEntityObject) {
+			warehouseIdsList.add(warehouseEntity.getWarehouseId());
+		}
+		
+		return warehouseIdsList;
+	}
+	
+}

@@ -1,5 +1,7 @@
 package com.capgemini.dnd.service;
 
+import java.util.ArrayList;
+
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
@@ -23,5 +25,11 @@ public interface ProductService {
 	public boolean doesProductOrderIdExistInStock(String orderId);
 	
 	public String updateStatusProductOrder(String orderId, String deliveryStatus);
+
+	public ArrayList<String> fetchProductNames();
+
+	public ArrayList<String> fetchDistributorIds();
+
+	public ArrayList<String> fetchWarehouseIds();
 	
 }
