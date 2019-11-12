@@ -26,6 +26,8 @@ public interface RawMaterialService {
 	public String updateRawMaterialStock(RawMaterialStock rawMaterialStock);
 	public String displayRawmaterialOrders(DisplayRawMaterialOrder displayRawMaterialOrderObject) throws DisplayException, BackEndException;
 
-	public boolean doesRawMaterialOrderIdExistInStock(String orderId);	
+	public boolean doesRawMaterialOrderIdExistInStock(String orderId);
+
+	public String updateStatusRawMaterialOrder(String id, String status);	
 }
 
