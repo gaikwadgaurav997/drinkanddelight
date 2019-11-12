@@ -41,24 +41,15 @@ public class PlaceProductOrderController {
     @RequestMapping(method = RequestMethod.POST)
     public String placeProductOrder(HttpServletRequest request) throws JsonParseException, JsonMappingException, IOException {
 
- 
-//    	System.out.println(request.getParameter("name"));
-//        Map<String, String> myMap = MappingUtil.convertJsonObjectToFieldValueMap(request);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         ProductOrder productOrder;
         try {
             productOrder = new ProductOrder(request.getParameter("name"), request.getParameter("distributorId"), Double.parseDouble(request.getParameter("quantityValue")), request.getParameter("quantityUnit"),sdf.parse(request.getParameter("dateOfDelivery")), Double.parseDouble(request.getParameter("pricePerUnit")), request.getParameter("warehouseId"));
-//            		myMap.get("name"), myMap.get("distributorId"),
-//                    Double.parseDouble(myMap.get("quantityValue")), myMap.get("quantityUnit"),
-//                    sdf.parse(myMap.get("dateOfDelivery")), Double.parseDouble(myMap.get("pricePerUnit")),
-//                    myMap.get("warehouseId"));
             System.out.println(productOrder);
         } catch (NumberFormatException | ParseException exception) {
             String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());
             return errorJsonMessage;
         }
-
- 
 
         Date today = new Date();
         productOrder.setDateOfOrder(today);
@@ -67,8 +58,6 @@ public class PlaceProductOrderController {
 //        try {
             String jsonMessage = productService.addProductOrder(productOrder);
             return jsonMessage;
-
- 
 
 //        } catch (ProductOrderNotAddedException | ConnectionException | SQLException | DisplayException exception) {
 //            String errorJsonMessage = JsonUtil.convertJavaToJson(exception.getMessage());

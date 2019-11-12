@@ -134,9 +134,9 @@ public class ProductServiceImpl implements ProductService {
         
             ProductStockEntity productStockEntity = productStockEntityObject.get();
         
+            try {
+            
             Date manufacturingDate = productStockEntity.getManufacturingDate();
-
- 
 
             Date expiryDate = productStockEntity.getExpiryDate();
 
@@ -150,6 +150,12 @@ public class ProductServiceImpl implements ProductService {
             else {
                 logger.error(Constants.EXIT_DATE_EXCEPTION);
                 throw new ExitDateException(Constants.EXIT_DATE_EXCEPTION);
+            }
+            
+            }
+            catch(NullPointerException exception) {
+                logger.error(Constants.INCOMPLETE_INFORMATION_UPDATE_DATABASE);
+                throw new IncompleteDataException(Constants.INCOMPLETE_INFORMATION_UPDATE_DATABASE);
             }
         
         }
@@ -191,7 +197,39 @@ public class ProductServiceImpl implements ProductService {
         
         int id = Integer.parseInt(productStock.getOrderId());
         
+        boolean orderIdcheckInStock = false;
+
+		orderIdcheckInStock = doesProductOrderIdExistInStock(productStock.getOrderId());
+
+		if (orderIdcheckInStock == false) {
+			
+			Optional<ProductOrdersEntity> productOrderEntityObject = productOrderDAO.findById(id);
+	        ProductOrdersEntity productOrderEntity = productOrderEntityObject.get();
+			
+		     	productStockEntity.setOrderId(productOrderEntity.getOrderId());
+	        	productStockEntity.setName(productOrderEntity.getName());
+		        productStockEntity.setPricePerUnit(productOrderEntity.getPricePerUnit());
+		        productStockEntity.setQuantityValue(productOrderEntity.getQuantityValue());
+		        productStockEntity.setQuantityUnit(productOrderEntity.getQuantityUnit());
+		        productStockEntity.setTotalPrice(productOrderEntity.getTotalPrice());
+		        productStockEntity.setWarehouseId(productOrderEntity.getWarehouseId());
+		        productStockEntity.setDateofDelivery(productOrderEntity.getDateofDelivery());
+		        
+		        productStockEntity.setManufacturingDate(productStock.getManufacturingDate());
+		        productStockEntity.setExpiryDate(productStock.getExpiryDate());
+		        productStockEntity.setQualityCheck(productStock.getQualityCheck());
+
+		        
+		        productStockDAO.saveAndFlush(productStockEntity);
+                
+		        String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
+		        return jsonMessage;
+			
+		}
         
+        
+        else {
+        	
         Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(id);
         ProductStockEntity productStockEntity = productStockEntityObject.get();
         
@@ -206,38 +244,40 @@ public class ProductServiceImpl implements ProductService {
         String jsonMessage = JsonUtil.convertJavaToJson(Constants.DATA_INSERTED_MESSAGE);
         return jsonMessage;
         
+        }
         
     }
+    
+    @Override
+	public boolean doesProductOrderIdExistInStock(String orderId) {
+
+		boolean productOrderIdFound = false;
+		try {
+	        Optional<ProductStockEntity> productStockEntityObject = productStockDAO.findById(Integer.parseInt(orderId));
+	        
+	        if(productStockEntityObject.isPresent()) {
+	            productOrderIdFound = true;
+	            return productOrderIdFound;
+	        }
+	        
+	        else {
+	            logger.error(Constants.PRODUCT_ID_DOES_NOT_EXIST_IN_STOCK_EXCEPTION);
+	            return productOrderIdFound;
+	            
+	        }
+	        }
+	        catch(NumberFormatException exception) {
+	        	logger.error(Constants.INVALID_INPUT_FORMAT);
+	        	return productOrderIdFound;
+	        }
+		
+	}
 
  
-
-    
-    @SuppressWarnings("null")
-    public void newEntryIntoProductStock(ProductOrder productOrder) {
-        
-       
-        
-        productStockEntity.setName(productOrder.getName());
-        productStockEntity.setPricePerUnit(productOrder.getPricePerUnit());
-        productStockEntity.setQuantityValue(productOrder.getQuantityValue());
-        productStockEntity.setQuantityUnit(productOrder.getQuantityUnit());
-        productStockEntity.setTotalPrice(productOrder.getTotalPrice());
-        productStockEntity.setWarehouseId(productOrder.getWarehouseId());
-        productStockEntity.setDateofDelivery(productOrder.getDateofDelivery());
-        
-        productStockDAO.saveAndFlush(productStockEntity);
-        
-    }
-    
-    @SuppressWarnings("null")
     @Override
     public String addProductOrder(ProductOrder productOrder) {
 
- 
-    
-    System.out.println(productOrder);
-    String n = productOrder.getName();
-    productOrdersEntity.setName(n);
+    productOrdersEntity.setName(productOrder.getName());
     productOrdersEntity.setDistributorId(productOrder.getDistributorId());
     productOrdersEntity.setQuantityValue(productOrder.getQuantityValue());
     productOrdersEntity.setQuantityUnit(productOrder.getQuantityUnit());
@@ -249,14 +289,9 @@ public class ProductServiceImpl implements ProductService {
     productOrdersEntity.setDeliveryStatus(productOrder.getDeliveryStatus());
     productOrdersEntity.setWarehouseId(productOrder.getWarehouseId());
 
- 
-
     productOrderDAO.saveAndFlush(productOrdersEntity);
     
-    newEntryIntoProductStock(productOrder);
-    
     String jsonMessage = JsonUtil.convertJavaToJson(Constants.PRODUCT_ORDER_ADDED);
-    
     return jsonMessage;
     
     }

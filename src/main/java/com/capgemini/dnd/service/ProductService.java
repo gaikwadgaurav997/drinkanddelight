@@ -19,5 +19,7 @@ public interface ProductService {
 	public String updateProductStock(ProductStock productStock);
 
 	public String addProductOrder(ProductOrder productOrder);
+
+	public boolean doesProductOrderIdExistInStock(String orderId);
 	
 }
