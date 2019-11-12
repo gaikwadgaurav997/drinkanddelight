@@ -77,6 +77,15 @@ class RawMaterialServiceImplTest {
 			rawMaterialService.doesRawMaterialOrderIdExist("500");
 			});
 	}
+	
+	@Test
+	@Rollback(true)
+	public void testDoesRawMaterialOrderIdExist3() throws RMOrderIDDoesNotExistException {
+		
+		assertThrows(RMOrderIDDoesNotExistException.class, () -> {
+			rawMaterialService.doesRawMaterialOrderIdExist("5OQ");
+			});
+	}
 
 	@Test
 	@Rollback(true)
@@ -95,6 +104,17 @@ class RawMaterialServiceImplTest {
 	public void testProcessDateCheck2() throws ProcessDateException, IncompleteDataException, ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		RawMaterialStock rawMaterialStock = new RawMaterialStock("1",sdf.parse("2020-10-09"));
+		assertThrows(ProcessDateException.class, () -> {
+				 rawMaterialService.processDateCheck(rawMaterialStock);
+				});
+			
+	}
+	
+	@Test
+	@Rollback(true)
+	public void testProcessDateCheck3() throws ProcessDateException, IncompleteDataException, ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		RawMaterialStock rawMaterialStock = new RawMaterialStock("1",sdf.parse("2010-10-09"));
 		assertThrows(ProcessDateException.class, () -> {
 				 rawMaterialService.processDateCheck(rawMaterialStock);
 				});
@@ -184,6 +204,12 @@ class RawMaterialServiceImplTest {
 	@Rollback(true)
 	public void testDoesRawMaterialOrderIdExistInStock2() {
 		assertFalse(rawMaterialService.doesRawMaterialOrderIdExistInStock("500"));
+	}
+	
+	@Test
+	@Rollback(true)
+	public void testDoesRawMaterialOrderIdExistInStock3() {
+		assertFalse(rawMaterialService.doesRawMaterialOrderIdExistInStock("5OQ"));
 	}
 
 }

@@ -76,6 +76,15 @@ class ProductServiceImplTest {
 			productService.doesProductOrderIdExist("500");
 			});
 	}
+	
+	@Test
+	@Rollback(true)
+	public void testDoesProductOrderIdExist3() throws ProductOrderIDDoesNotExistException {
+		
+		assertThrows(ProductOrderIDDoesNotExistException.class, () -> {
+			productService.doesProductOrderIdExist("5OQ");
+			});
+	}
 
 	@Test
 	@Rollback(true)
@@ -94,6 +103,17 @@ class ProductServiceImplTest {
 	public void testExitDateCheck2() throws IncompleteDataException, ParseException, ExitDateException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		ProductStock productStock = new ProductStock("1",sdf.parse("2020-10-09"));
+		assertThrows(ExitDateException.class, () -> {
+				 productService.exitDateCheck(productStock);
+				});
+			
+	}
+	
+	@Test
+	@Rollback(true)
+	public void testExitDateCheck3() throws IncompleteDataException, ParseException, ExitDateException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		ProductStock productStock = new ProductStock("1",sdf.parse("2010-10-09"));
 		assertThrows(ExitDateException.class, () -> {
 				 productService.exitDateCheck(productStock);
 				});
@@ -183,6 +203,12 @@ class ProductServiceImplTest {
 	@Rollback(true)
 	public void testDoesProductOrderIdExistInStock2() {
 		assertFalse(productService.doesProductOrderIdExistInStock("500"));
+	}
+	
+	@Test
+	@Rollback(true)
+	public void testDoesProductOrderIdExistInStock3() {
+		assertFalse(productService.doesProductOrderIdExistInStock("5OQ"));
 	}
 	
 	
