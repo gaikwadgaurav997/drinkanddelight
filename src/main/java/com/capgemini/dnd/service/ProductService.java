@@ -22,4 +22,6 @@ public interface ProductService {
 
 	public boolean doesProductOrderIdExistInStock(String orderId);
 	
+	public String updateStatusProductOrder(String orderId, String deliveryStatus);
+	
 }

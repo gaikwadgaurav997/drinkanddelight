@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
+import com.capgemini.dnd.customexceptions.UpdateException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.ProductOrdersDAO;
 import com.capgemini.dnd.dao.ProductStockDAO;
@@ -295,4 +296,26 @@ public class ProductServiceImpl implements ProductService {
     return jsonMessage;
     
     }
+    
+    @Override
+    public String updateStatusProductOrder(String orderId, String deliveryStatus) {
+        
+        try {
+            ProductOrdersEntity productOrdersEntity = productOrderDAO.findById(Integer.parseInt(orderId)).orElse(new ProductOrdersEntity());
+            productOrdersEntity.setDeliveryStatus(deliveryStatus);
+            productOrderDAO.saveAndFlush(productOrdersEntity);
+            logger.info(Constants.UPADTED_SUCCESSFULLY_MESSAGE);
+            return JsonUtil.convertJavaToJson(Constants.UPADTED_SUCCESSFULLY_MESSAGE);
+        } catch (Exception e) {
+            
+                logger.error(e);
+                
+            }
+            try {
+                throw new UpdateException(Constants.UPDATE_EXCEPTION_MESSAGE_FAILURE_DELIVERY);
+            } catch (UpdateException ex) {
+                return ex.getMessage();
+            }
+        } 
+    
     }
