@@ -1,18 +1,32 @@
 package com.capgemini.dnd.service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capgemini.dnd.customexceptions.BackEndException;
+import com.capgemini.dnd.customexceptions.DisplayException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProcessDateException;
 import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.RawMaterialOrdersDAO;
 import com.capgemini.dnd.dao.RawMaterialStockDAO;
+import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
@@ -26,7 +40,10 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 
 
 	Logger logger = Logger.getRootLogger();
-
+	
+	@Autowired
+	  SessionFactory sessionFactory;
+	  
 	@Autowired
 	private RawMaterialStockDAO rawMaterialStockDAO;
 	
@@ -188,5 +205,72 @@ public class RawMaterialServiceImpl implements RawMaterialService {
         
     }
 
+	@Override
+	public String displayRawmaterialOrders(DisplayRawMaterialOrder displayRawMaterialOrderObject)
+			throws DisplayException, BackEndException {
+
+		Session session = null;
+		Criteria cr = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<RawMaterialOrderEntity> list = new ArrayList<RawMaterialOrderEntity>();
+		String jsonMessage;
+		
+		try {
+
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+
+			String deliveryStatus = displayRawMaterialOrderObject.getDeliveryStatus();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<RawMaterialOrderEntity> criteria = builder.createQuery(RawMaterialOrderEntity.class);
+			Root<RawMaterialOrderEntity> root = criteria.from(RawMaterialOrderEntity.class);
+
+			if (deliveryStatus.equals("ALL")) {
+
+				;
+			} else {
+
+				criteria.select(root).where(builder.equal(root.get("deliveryStatus"), deliveryStatus));
+
+			}
+			String supplierId = displayRawMaterialOrderObject.getSupplierid();
+
+			if (supplierId.equals("ALL"))
+				;
+			else
+				criteria.select(root).where(builder.equal(root.get("supplierId"), supplierId));
+
+			String startDate = displayRawMaterialOrderObject.getStartdate();
+			String endDate = displayRawMaterialOrderObject.getEndDate();
+
+			if (startDate != null && endDate != null) {
+				criteria.select(root)
+						.where(builder.between(root.get("dateOfDelivery"), sdf.parse(startDate), sdf.parse(endDate)));
+
+			}
+
+			Query<RawMaterialOrderEntity> q = session.createQuery(criteria);
+			list = q.list();
+			if (list.isEmpty()) {
+				logger.error(Constants.LOGGER_ERROR_FETCH_FAILED);
+				throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+			} else {
+				logger.info(Constants.LOGGER_INFO_DISPLAY_SUCCESSFUL);
+
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+		}
+
+		finally {
+
+			session.close();
+		}
+		return jsonMessage = JsonUtil.convertJavaToJson1(list);
+
+	}
 
 }
