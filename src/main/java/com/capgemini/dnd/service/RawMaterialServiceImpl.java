@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -217,7 +216,7 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 			throws DisplayException, BackEndException {
 
 		Session session = null;
-		Criteria cr = null;
+//		Criteria cr = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		List<RawMaterialOrderEntity> list = new ArrayList<RawMaterialOrderEntity>();
 		String jsonMessage;
@@ -276,7 +275,8 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 
 			session.close();
 		}
-		return jsonMessage = JsonUtil.convertJavaToJson1(list);
+		jsonMessage = JsonUtil.convertJavaToJson1(list);
+		return jsonMessage;
 
 	}
 
