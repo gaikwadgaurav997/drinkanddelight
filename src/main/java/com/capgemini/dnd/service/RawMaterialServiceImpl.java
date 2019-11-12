@@ -27,7 +27,6 @@ import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.RawMaterialOrdersDAO;
 import com.capgemini.dnd.dao.RawMaterialStockDAO;
 import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
-import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
 import com.capgemini.dnd.entity.RawMaterialStockEntity;
@@ -50,12 +49,6 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 	@Autowired
 	private RawMaterialOrdersDAO rawMaterialOrderDAO;
 
-    @Autowired
-    private RawMaterialStockDAO rawMaterialStockDAO;
-    
-    @Autowired
-    private RawMaterialOrdersDAO rawMaterialOrderDAO;
-    
     @Autowired
     RawMaterialOrderEntity rawMaterialOrdersEntity;
     

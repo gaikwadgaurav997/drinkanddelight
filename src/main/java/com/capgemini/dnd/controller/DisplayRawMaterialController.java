@@ -23,7 +23,6 @@ import com.capgemini.dnd.service.RawMaterialService;
 import com.capgemini.dnd.util.MappingUtil;
 
 @Controller
-@CrossOrigin(origins = "*")
 @RequestMapping("/RawmaterialOrder")
 @ComponentScan(basePackages = {
 	    "com.capgemini.*"
@@ -33,6 +32,7 @@ public class DisplayRawMaterialController {
 	@Autowired
 	RawMaterialService rawmaterialServiceObject;
 	
+	@CrossOrigin(origins = "*")
 	@RequestMapping(method = RequestMethod.POST)
 	    public void display(HttpServletRequest request, HttpServletResponse response) throws IOException {
 	    

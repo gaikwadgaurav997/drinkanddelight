@@ -10,6 +10,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.NamedQuery;
 
+
 @Entity
 @NamedQuery(name="GetOneConfidentialDetail", query="FROM EmployeeCredentialEntity WHERE Username=:username") 
 @Table (

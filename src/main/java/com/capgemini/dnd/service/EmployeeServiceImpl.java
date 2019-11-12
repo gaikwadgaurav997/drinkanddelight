@@ -21,7 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private Logger logger = Logger.getRootLogger();
 
 	@Autowired
-	EmployeeDAO employeeDAO;
+	private EmployeeDAO employeeDAO;
 	
 	
 
