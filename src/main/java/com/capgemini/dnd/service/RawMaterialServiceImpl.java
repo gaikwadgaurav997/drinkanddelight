@@ -23,11 +23,13 @@ import com.capgemini.dnd.customexceptions.DisplayException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProcessDateException;
 import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
+import com.capgemini.dnd.customexceptions.UpdateException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.RawMaterialOrdersDAO;
 import com.capgemini.dnd.dao.RawMaterialStockDAO;
 import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
+import com.capgemini.dnd.entity.ProductOrdersEntity;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
 import com.capgemini.dnd.entity.RawMaterialStockEntity;
 import com.capgemini.dnd.util.JsonUtil;
@@ -331,6 +333,27 @@ public class RawMaterialServiceImpl implements RawMaterialService {
         return jsonMessage;
         }
 
+    }
+    public String updateStatusRawMaterialOrder(String orderId, String deliveryStatus) {
+    	try {
+    		RawMaterialOrderEntity rawMaterialOrdersEntity = rawMaterialOrderDAO.findById(Integer.parseInt(orderId)).orElse(new RawMaterialOrderEntity());
+    		rawMaterialOrdersEntity.setDeliveryStatus(deliveryStatus);
+    		rawMaterialOrderDAO.saveAndFlush(rawMaterialOrdersEntity);
+            logger.info(Constants.UPADTED_SUCCESSFULLY_MESSAGE);
+            return JsonUtil.convertJavaToJson(Constants.UPADTED_SUCCESSFULLY_MESSAGE);
+        } catch (Exception e) {
+            
+                logger.error(e);
+                
+            try {
+                throw new UpdateException(Constants.UPDATE_EXCEPTION_MESSAGE_FAILURE_DELIVERY);
+            } catch (UpdateException ex) {
+                return ex.getMessage();
+            }
+        } 
+    
+  
+    	
     }
     
 }
