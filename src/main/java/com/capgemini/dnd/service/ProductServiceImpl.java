@@ -1,5 +1,6 @@
 package com.capgemini.dnd.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -29,6 +31,7 @@ import com.capgemini.dnd.dao.ProductOrdersDAO;
 import com.capgemini.dnd.dao.ProductStockDAO;
 import com.capgemini.dnd.dao.WarehouseDAO;
 import com.capgemini.dnd.dao.ProductSpecsDAO;
+import com.capgemini.dnd.dto.DisplayProductOrder;
 import com.capgemini.dnd.dto.Distributor;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
@@ -431,4 +434,70 @@ public class ProductServiceImpl implements ProductService {
 			jsonMessage = JsonUtil.convertJavaToJson1(distributorlist);
 			return jsonMessage ;
 		}
+	@Override
+	public String displayProductOrders(DisplayProductOrder displayProductOrderObject)
+			throws DisplayException, BackEndException {
+
+		Session session = null;
+		Criteria cr = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<ProductOrdersEntity> list = new ArrayList<ProductOrdersEntity>();
+		String jsonMessage;
+
+		try {
+
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			String deliveryStatus = displayProductOrderObject.getDeliveryStatus();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ProductOrdersEntity> criteria = builder.createQuery(ProductOrdersEntity.class);
+			Root<ProductOrdersEntity> root = criteria.from(ProductOrdersEntity.class);
+
+			if (deliveryStatus.equals("ALL")) {
+
+				;
+			} else {
+
+				criteria.select(root).where(builder.equal(root.get("deliveryStatus"), deliveryStatus));
+
+			}
+			String distributorId = displayProductOrderObject.getDistributorid();
+
+			if (distributorId.equals("ALL"))
+				;
+			else
+				criteria.select(root).where(builder.equal(root.get("distributorId"), distributorId));
+
+			String startDate = displayProductOrderObject.getStartdate();
+			String endDate = displayProductOrderObject.getEndDate();
+
+			if (startDate != null && endDate != null) {
+				criteria.select(root)
+						.where(builder.between(root.get("dateOfDelivery"), sdf.parse(startDate), sdf.parse(endDate)));
+
+			}
+
+			Query<ProductOrdersEntity> q = session.createQuery(criteria);
+			list = q.list();
+			if (list.isEmpty()) {
+				logger.error(Constants.LOGGER_ERROR_FETCH_FAILED);
+				throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+			} else {
+				logger.info(Constants.LOGGER_INFO_DISPLAY_SUCCESSFUL);
+
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+		}
+
+		finally {
+
+			session.close();
+		}
+		return jsonMessage = JsonUtil.convertJavaToJson1(list);
+
+	}
 }

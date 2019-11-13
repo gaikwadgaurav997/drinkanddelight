@@ -9,6 +9,7 @@ import com.capgemini.dnd.customexceptions.DoesNotExistException;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
+import com.capgemini.dnd.dto.DisplayProductOrder;
 import com.capgemini.dnd.dto.Distributor;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
@@ -43,4 +44,6 @@ public interface ProductService {
 	public String fetchDistributorDetail(Distributor distributor)
 			throws BackEndException, DoesNotExistException, DisplayException;
 	
+	String displayProductOrders(DisplayProductOrder displayProductOrderObject)
+			throws DisplayException, BackEndException;
 }
