@@ -296,7 +296,7 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 			}
 		} catch (Exception e) {
 
-			e.printStackTrace();
+	
 			throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
 		}
 

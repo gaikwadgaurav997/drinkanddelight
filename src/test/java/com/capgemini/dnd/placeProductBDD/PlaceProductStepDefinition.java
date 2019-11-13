@@ -23,7 +23,7 @@ public class PlaceProductStepDefinition {
 
 	WebDriver driver;
 
-	@Given("User is on drink and delight login page")
+	@Given("User is on drink and delight login pages")
 	public void user_is_on_drink_and_delight_login_page() {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("start-maximized");
@@ -32,7 +32,7 @@ public class PlaceProductStepDefinition {
 		driver.get("http://localhost:4200/");
 	}
 
-	@Given("User enters login credentials")
+	@Given("User enters login credential")
 	public void user_enters_login_credentials_given() {
 		driver.findElement(By.name("username")).sendKeys("saurabh123");
 		driver.findElement(By.name("password")).sendKeys("hello");
