@@ -39,7 +39,6 @@ public class ForgotPasswordController {
 		try {
 			if (employeeService.employeeExists(employee)) {
 				String jsonMessage = JsonUtil.convertJavaToJson(ControllerConstants.USERNAME_EXISTS_MESSAGE);
-				System.out.println("exists");
 				response.getWriter().write(jsonMessage);
 			}
 		} catch (Exception exception) {
