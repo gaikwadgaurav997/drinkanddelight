@@ -6,10 +6,10 @@ Background: User navigates to drinkanddelight login page
 Given I am on drinkanddelight login page 
 	
 	#Scenario Outline with AND 
-Scenario Outline: Successful Login for valid credentials (examples) 
+	Scenario Outline: Successful Login for valid credentials (examples) 
 	When I enter username as "<username>" 
 	And I enter password as "<password>" 
-	And clicks on the submit button 
+	And click on the submit button 
 	
 	Examples: 
 		| username  | password  | 

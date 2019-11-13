@@ -1,4 +1,4 @@
-package com.capgemini.dnd.authenticationBDD;
+package com.capgemini.dnd.loginBDD;
 
 import org.junit.runner.RunWith;
 

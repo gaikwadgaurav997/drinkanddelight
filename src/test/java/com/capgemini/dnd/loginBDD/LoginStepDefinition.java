@@ -1,4 +1,4 @@
-package com.capgemini.dnd.authenticationBDD;
+package com.capgemini.dnd.loginBDD;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -41,11 +41,11 @@ public class LoginStepDefinition {
 		driver.findElement(By.id("password")).sendKeys(arg1);
 	}
 
-	@And("clicks on the submit button")
+	@And("click on the submit button")
 	public void clicks_on_the_submit_button() throws InterruptedException {
-		WebElement loginBtn = driver.findElement(By.xpath("//*[@id=\"homepage\"]/div/div/div/div[2]/form/button"));
+		WebElement loginButton = driver.findElement(By.xpath("//*[@id=\"homepage\"]/div/div/div/div[2]/form/button"));
 		JavascriptExecutor jsButton = (JavascriptExecutor) driver;
-		jsButton.executeScript("arguments[0].click();", loginBtn);
+		jsButton.executeScript("arguments[0].click();", loginButton);
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
