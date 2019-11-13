@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.dnd.customexceptions.BackEndException;
 import com.capgemini.dnd.customexceptions.PasswordException;
-import com.capgemini.dnd.customexceptions.RowNotFoundException;
 import com.capgemini.dnd.customexceptions.UnregisteredEmployeeException;
-import com.capgemini.dnd.customexceptions.WrongPasswordException;
 import com.capgemini.dnd.customexceptions.WrongSecurityAnswerException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.EmployeeDAO;
@@ -26,15 +24,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 
 	/*******************************************************************************************************
-	 * - Function Name : login - Input Parameters : Employee (DTO; its username and
-	 * password variables are set) - Return Type : boolean - Throws :
-	 * UnregisteredEmployeeException, WrongPasswordException, BackEndException -
-	 * Author : Akash Deep, Capgemini - Description : To check wheteher an employee
-	 * with the given username and password is eligible to login or not, uses
-	 * employeeExists and setLoggedIn
+	 * - Function Name    : login 
+	 * - Input Parameters : Employee (DTO; its username and password variables are set) 
+	 * - Return Type      : boolean 
+	 * - Throws           : UnregisteredEmployeeException, WrongPasswordException, BackEndException 
+	 * - Author           : Akash Deep, Capgemini 
+	 * - Description      : To check whether an employee with the given username and password is eligible to login or not. 		     
 	 ********************************************************************************************************/
 	@Override
-	public boolean login(Employee employee) throws UnregisteredEmployeeException, WrongPasswordException, BackEndException {
+	public boolean login(Employee employee) throws UnregisteredEmployeeException, PasswordException {
 		boolean eligibleToLogin = false;
 		if (employeeDAO.existsByUserName(employee.getUsername())) {
 			EmployeeCredentialEntity empCredEntity = employeeDAO.findByUserName(employee.getUsername()).get(0);
@@ -42,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				eligibleToLogin = true;
 			} else {
 				logger.error(Constants.INCORRECT_PASSWORD_MESSAGE);
-				throw new WrongPasswordException(Constants.INCORRECT_PASSWORD_MESSAGE);
+				throw new PasswordException(Constants.INCORRECT_PASSWORD_MESSAGE);
 			}
 		} else {
 			logger.error(Constants.LOGGER_ERROR_MESSAGE_UNREGISTERED_USER);
@@ -51,7 +49,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		return eligibleToLogin;
 	}
-
+	
+	/*******************************************************************************************************
+	 - Function Name	:	employeeExists
+	 - Input Parameters	:	Employee (DTO; its username variable is set)
+	 - Return Type		:	boolean
+	 - Throws			:  	UnregisteredEmployeeException
+	 - Author			:	Akash Deep, Capgemini
+	 - Description		:	To check if the employee with given username exists, if does not exist then throw
+	 						UnregisteredEmployeeException
+	 ********************************************************************************************************/
+	
 	@Override
 	public boolean employeeExists(Employee employee) throws UnregisteredEmployeeException {
 		boolean employeeExists=false;
@@ -75,7 +83,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 ********************************************************************************************************/
 	@Override
 	public Employee fetchOneConfidentialDetail(Employee employee) throws BackEndException {
-		EmployeeCredentialEntity empCredEntity = employeeDAO.findByUserName(employee.getUsername()).get(0);
+		EmployeeCredentialEntity empCredEntity = null;
+		try {
+			empCredEntity = employeeDAO.findByUserName(employee.getUsername()).get(0);
+		} catch (IndexOutOfBoundsException exception) {
+			throw new BackEndException(Constants.SERVER_ERROR_MESSAGE);
+		}
 		employee.setEmpId(empCredEntity.getEmpId());
 		employee.setSecurityQuestion(empCredEntity.getSecurityQuestion());
 		employee.setSecurityAnswer(empCredEntity.getSecurityAnswer());
@@ -91,14 +104,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 						Second Employee parameter has the details input by the user which have to be checked against 
 	 						the details of the first Employee parameter.
 	 - Return Type		:	boolean
-	 - Throws			:  	WrongSecurityAnswerException, PasswordException, BackEndException, RowNotFoundException
+	 - Throws			:  	WrongSecurityAnswerException, PasswordException
 	 - Author			:	Akash Deep, Capgemini
 	 - Description		:	To change password of the employee with given username if it has correct details 
 	 						else throw appropriate exceptions.
 	 ********************************************************************************************************/
 	@Override
 	public boolean changePassword(Employee idealEmployee, Employee actualEmployee)
-			throws WrongSecurityAnswerException, PasswordException, BackEndException, RowNotFoundException {
+			throws WrongSecurityAnswerException, PasswordException {
 		boolean passwordChanged = false;
 
 		if (idealEmployee.getSecurityAnswer().equals(actualEmployee.getSecurityAnswer())) {
