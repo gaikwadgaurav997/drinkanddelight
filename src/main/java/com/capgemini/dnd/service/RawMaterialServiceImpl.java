@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.dnd.customexceptions.BackEndException;
 import com.capgemini.dnd.customexceptions.DisplayException;
+import com.capgemini.dnd.customexceptions.DoesNotExistException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProcessDateException;
 import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
@@ -32,6 +33,7 @@ import com.capgemini.dnd.dao.WarehouseDAO;
 import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
+import com.capgemini.dnd.dto.Supplier;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
 import com.capgemini.dnd.entity.RawMaterialSpecsEntity;
 import com.capgemini.dnd.entity.RawMaterialStockEntity;
@@ -436,8 +438,51 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 		
 		return warehouseIdsList;
 	}
+
+
+	@Override	
+  public String fetchSupplierDetail(Supplier supplierDetails) throws DisplayException  {
+			Session session = null;
+			List<SupplierEntity> supplierlist = new ArrayList<SupplierEntity>();
+			String jsonMessage ="";
+			try {
+	         session = sessionFactory.openSession();
+				session.beginTransaction();
+
+				String supplierId = supplierDetails.getSupplierId();
+				CriteriaBuilder builder = session.getCriteriaBuilder();
+				CriteriaQuery<SupplierEntity> criteria = builder.createQuery(SupplierEntity.class);
+				Root<SupplierEntity> root = criteria.from(SupplierEntity.class);
+
+				criteria.select(root).where(builder.equal(root.get("supplierId"), supplierId));
+
+				Query<SupplierEntity> query = session.createQuery(criteria);
+				supplierlist = query.list();
+				
+				if (supplierlist.isEmpty()) {
+					logger.error(Constants.LOGGER_ERROR_FETCH_FAILED);
+					throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+
+				} else {
+					logger.info(Constants.LOGGER_INFO_DISPLAY_SUCCESSFUL);
+
+				}
+			} catch (Exception e) {
+
+				e.printStackTrace();
+				throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+			}
+
+			finally {
+
+				session.close();
+			}
+		 jsonMessage = JsonUtil.convertJavaToJson1(supplierlist);
+			return jsonMessage ;
+
+		}
+	}
     
     
 
     
-}
