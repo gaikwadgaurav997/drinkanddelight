@@ -1,29 +1,45 @@
 package com.capgemini.dnd.service;
 
- 
-
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
- 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
- 
-
+import com.capgemini.dnd.customexceptions.BackEndException;
+import com.capgemini.dnd.customexceptions.DisplayException;
+import com.capgemini.dnd.customexceptions.DoesNotExistException;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
 import com.capgemini.dnd.customexceptions.UpdateException;
 import com.capgemini.dnd.dao.Constants;
+import com.capgemini.dnd.dao.DistributorDAO;
 import com.capgemini.dnd.dao.ProductOrdersDAO;
 import com.capgemini.dnd.dao.ProductStockDAO;
+import com.capgemini.dnd.dao.WarehouseDAO;
+import com.capgemini.dnd.dao.ProductSpecsDAO;
+import com.capgemini.dnd.dto.DisplayProductOrder;
+import com.capgemini.dnd.dto.Distributor;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
+import com.capgemini.dnd.entity.DistributorEntity;
 import com.capgemini.dnd.entity.ProductOrdersEntity;
+import com.capgemini.dnd.entity.ProductSpecsEntity;
 import com.capgemini.dnd.entity.ProductStockEntity;
+import com.capgemini.dnd.entity.WarehouseEntity;
 import com.capgemini.dnd.util.JsonUtil;
 import com.capgemini.dnd.util.ServiceUtil;
 
@@ -38,7 +54,8 @@ public class ProductServiceImpl implements ProductService {
 
     Logger logger = Logger.getRootLogger();
 
- 
+    @Autowired
+    SessionFactory sessionFactory;
 
     @Autowired
     private ProductStockDAO productStockDAO;
@@ -47,12 +64,29 @@ public class ProductServiceImpl implements ProductService {
     private ProductOrdersDAO productOrderDAO;
     
     @Autowired
+    private ProductSpecsDAO productSpecsDAO;
+    
+    @Autowired
+    private DistributorDAO distributorDAO;
+    
+    @Autowired
+    private WarehouseDAO warehouseDAO;
+    
+    @Autowired
     ProductOrdersEntity productOrdersEntity;
     
     @Autowired
     ProductStockEntity productStockEntity;
-     
-
+    
+    @Autowired
+    ProductSpecsEntity productSpecsEntity;
+    
+    @Autowired
+    DistributorEntity distributorEntity;
+    
+    @Autowired
+    WarehouseEntity warehouseEntity;
+    
     @Override
     public String trackProductOrder(ProductStock productStock) {
 
@@ -316,6 +350,154 @@ public class ProductServiceImpl implements ProductService {
             } catch (UpdateException ex) {
                 return ex.getMessage();
             }
-        } 
-    
-    }
+        }
+
+
+
+
+	@Override
+	public ArrayList<String> fetchProductNames() {
+		ArrayList<String> productNamesList = new ArrayList<String>();
+		List<ProductSpecsEntity> productSpecsEntityObject = productSpecsDAO.findAll();
+		
+		for (ProductSpecsEntity productSpecsEntity : productSpecsEntityObject) {
+			productNamesList.add(productSpecsEntity.getName());
+		}
+		
+		return productNamesList;
+	}
+	
+	@Override
+	public ArrayList<String> fetchDistributorIds() {
+		ArrayList<String> distributorNamesList = new ArrayList<String>();
+		List<DistributorEntity> distributorEntityObject = distributorDAO.findAll();
+		
+		for (DistributorEntity distributorEntity : distributorEntityObject) {
+			distributorNamesList.add(distributorEntity.getDistributorId());
+		}
+		
+		return distributorNamesList;
+	}
+
+	@Override
+	public ArrayList<String> fetchWarehouseIds() {
+		ArrayList<String> warehouseIdsList = new ArrayList<String>();
+		List<WarehouseEntity> warehouseEntityObject = warehouseDAO.findAll();
+		
+		for (WarehouseEntity warehouseEntity : warehouseEntityObject) {
+			warehouseIdsList.add(warehouseEntity.getWarehouseId());
+		}
+		
+		return warehouseIdsList;
+	}
+
+
+
+	@Override
+	
+		public String fetchDistributorDetail(Distributor distributor) throws DisplayException
+				{
+			
+		    Session session = null;
+			List<DistributorEntity> distributorlist = new ArrayList<DistributorEntity>();
+			String jsonMessage= "";
+			
+			try {
+				session = sessionFactory.openSession();
+				String distributorId = distributor.getDistributorId();
+				CriteriaBuilder builder = session.getCriteriaBuilder();
+				CriteriaQuery<DistributorEntity> criteria = builder.createQuery(DistributorEntity.class);
+				Root<DistributorEntity> root = criteria.from(DistributorEntity.class);
+
+				criteria.select(root).where(builder.equal(root.get("distributorId"), distributorId));
+
+				Query<DistributorEntity> query = session.createQuery(criteria);
+				distributorlist = query.list();
+				if (distributorlist.isEmpty()) {
+					logger.error(Constants.LOGGER_ERROR_FETCH_FAILED);
+					throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+
+				} else {
+					logger.info(Constants.LOGGER_INFO_DISPLAY_SUCCESSFUL);
+
+				}
+			} catch (Exception e) {
+
+				e.printStackTrace();
+				throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+			}
+
+			finally {
+
+				session.close();
+			}
+			jsonMessage = JsonUtil.convertJavaToJson1(distributorlist);
+			return jsonMessage ;
+		}
+	@Override
+	public String displayProductOrders(DisplayProductOrder displayProductOrderObject)
+			throws DisplayException, BackEndException {
+
+		Session session = null;
+		Criteria cr = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		List<ProductOrdersEntity> list = new ArrayList<ProductOrdersEntity>();
+		String jsonMessage;
+
+		try {
+
+			session = sessionFactory.openSession();
+			session.beginTransaction();
+			String deliveryStatus = displayProductOrderObject.getDeliveryStatus();
+
+			CriteriaBuilder builder = session.getCriteriaBuilder();
+			CriteriaQuery<ProductOrdersEntity> criteria = builder.createQuery(ProductOrdersEntity.class);
+			Root<ProductOrdersEntity> root = criteria.from(ProductOrdersEntity.class);
+
+			if (deliveryStatus.equals("ALL")) {
+
+				;
+			} else {
+
+				criteria.select(root).where(builder.equal(root.get("deliveryStatus"), deliveryStatus));
+
+			}
+			String distributorId = displayProductOrderObject.getDistributorid();
+
+			if (distributorId.equals("ALL"))
+				;
+			else
+				criteria.select(root).where(builder.equal(root.get("distributorId"), distributorId));
+
+			String startDate = displayProductOrderObject.getStartdate();
+			String endDate = displayProductOrderObject.getEndDate();
+
+			if (startDate != null && endDate != null) {
+				criteria.select(root)
+						.where(builder.between(root.get("dateOfDelivery"), sdf.parse(startDate), sdf.parse(endDate)));
+
+			}
+
+			Query<ProductOrdersEntity> q = session.createQuery(criteria);
+			list = q.list();
+			if (list.isEmpty()) {
+				logger.error(Constants.LOGGER_ERROR_FETCH_FAILED);
+				throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+			} else {
+				logger.info(Constants.LOGGER_INFO_DISPLAY_SUCCESSFUL);
+
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+		}
+
+		finally {
+
+			session.close();
+		}
+		return jsonMessage = JsonUtil.convertJavaToJson1(list);
+
+	}
+}

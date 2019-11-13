@@ -19,18 +19,26 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.dnd.customexceptions.BackEndException;
 import com.capgemini.dnd.customexceptions.DisplayException;
+import com.capgemini.dnd.customexceptions.DoesNotExistException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProcessDateException;
 import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
 import com.capgemini.dnd.customexceptions.UpdateException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.RawMaterialOrdersDAO;
+import com.capgemini.dnd.dao.RawMaterialSpecsDAO;
 import com.capgemini.dnd.dao.RawMaterialStockDAO;
+import com.capgemini.dnd.dao.SupplierDAO;
+import com.capgemini.dnd.dao.WarehouseDAO;
 import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
+import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
-import com.capgemini.dnd.entity.ProductOrdersEntity;
+import com.capgemini.dnd.dto.Supplier;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
+import com.capgemini.dnd.entity.RawMaterialSpecsEntity;
 import com.capgemini.dnd.entity.RawMaterialStockEntity;
+import com.capgemini.dnd.entity.SupplierEntity;
+import com.capgemini.dnd.entity.WarehouseEntity;
 import com.capgemini.dnd.util.JsonUtil;
 import com.capgemini.dnd.util.ServiceUtil;
 
@@ -49,12 +57,31 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 	
 	@Autowired
 	private RawMaterialOrdersDAO rawMaterialOrderDAO;
+	
+    @Autowired
+    private RawMaterialSpecsDAO rawMaterialSpecsDAO;
+    
+    @Autowired
+    private SupplierDAO supplierDAO;
+    
+    @Autowired
+    private WarehouseDAO warehouseDAO;
 
     @Autowired
     RawMaterialOrderEntity rawMaterialOrdersEntity;
     
     @Autowired
     RawMaterialStockEntity rawMaterialStockEntity;
+    
+    @Autowired
+    RawMaterialSpecsEntity rawMaterialSpecsEntity;
+    
+    @Autowired
+    SupplierEntity supplierEntity;
+    
+    @Autowired
+    WarehouseEntity warehouseEntity;
+    
 
 
     @Override
@@ -269,7 +296,7 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 			}
 		} catch (Exception e) {
 
-			e.printStackTrace();
+	
 			throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
 		}
 
@@ -356,30 +383,106 @@ public class RawMaterialServiceImpl implements RawMaterialService {
     	
     }
     
-}
- 
+    @Override
+    public String placeRawMaterialOrder(RawMaterialOrder rawMaterialOrder) {
+
+    rawMaterialOrdersEntity.setName(rawMaterialOrder.getName());
+    rawMaterialOrdersEntity.setSupplierId(rawMaterialOrder.getSupplierId());
+    rawMaterialOrdersEntity.setQuantityValue(rawMaterialOrder.getQuantityValue());
+    rawMaterialOrdersEntity.setQuantityUnit(rawMaterialOrder.getQuantityUnit());
+    rawMaterialOrdersEntity.setDateOfOrder(rawMaterialOrder.getDateOfOrder());
+    rawMaterialOrdersEntity.setDateOfDelivery(rawMaterialOrder.getDateOfDelivery());
+    rawMaterialOrdersEntity.setPricePerUnit(rawMaterialOrder.getPricePerUnit());
+    rawMaterialOrdersEntity.setTotalPrice(rawMaterialOrder.getQuantityValue()*rawMaterialOrder.getPricePerUnit());
+    rawMaterialOrdersEntity.setTotalPrice(rawMaterialOrder.getTotalPrice());
+    rawMaterialOrdersEntity.setDeliveryStatus(rawMaterialOrder.getDeliveryStatus());
+    rawMaterialOrdersEntity.setWarehouseId(rawMaterialOrder.getWarehouseId());
+
+    rawMaterialOrderDAO.saveAndFlush(rawMaterialOrdersEntity);
+    String jsonMessage = JsonUtil.convertJavaToJson(Constants.RM_ORDER_ADDED);
+    return jsonMessage;
+    }
+    
+    @Override
+	public ArrayList<String> fetchRawMaterialNames() {
+		ArrayList<String> rawMaterialNamesList = new ArrayList<String>();
+		List<RawMaterialSpecsEntity> rawMaterialSpecsEntityObject = rawMaterialSpecsDAO.findAll();
+		
+		for (RawMaterialSpecsEntity rawMaterialSpecsEntity : rawMaterialSpecsEntityObject) {
+			rawMaterialNamesList.add(rawMaterialSpecsEntity.getName());
+		}
+		
+		return rawMaterialNamesList;
+	}
+	
+	@Override
+	public ArrayList<String> fetchSupplierIds() {
+		ArrayList<String> supplierNamesList = new ArrayList<String>();
+		List<SupplierEntity> supplierEntityObject = supplierDAO.findAll();
+		
+		for (SupplierEntity supplierEntity : supplierEntityObject) {
+			supplierNamesList.add(supplierEntity.getSupplierId());
+		}
+		
+		return supplierNamesList;
+	}
+    
+    @Override
+	public ArrayList<String> fetchWarehouseIds() {
+		ArrayList<String> warehouseIdsList = new ArrayList<String>();
+		List<WarehouseEntity> warehouseEntityObject = warehouseDAO.findAll();
+		
+		for (WarehouseEntity warehouseEntity : warehouseEntityObject) {
+			warehouseIdsList.add(warehouseEntity.getWarehouseId());
+		}
+		
+		return warehouseIdsList;
+	}
 
 
+	@Override	
+  public String fetchSupplierDetail(Supplier supplierDetails) throws DisplayException  {
+			Session session = null;
+			List<SupplierEntity> supplierlist = new ArrayList<SupplierEntity>();
+			String jsonMessage ="";
+			try {
+	         session = sessionFactory.openSession();
+				session.beginTransaction();
 
+				String supplierId = supplierDetails.getSupplierId();
+				CriteriaBuilder builder = session.getCriteriaBuilder();
+				CriteriaQuery<SupplierEntity> criteria = builder.createQuery(SupplierEntity.class);
+				Root<SupplierEntity> root = criteria.from(SupplierEntity.class);
 
+				criteria.select(root).where(builder.equal(root.get("supplierId"), supplierId));
 
+				Query<SupplierEntity> query = session.createQuery(criteria);
+				supplierlist = query.list();
+				
+				if (supplierlist.isEmpty()) {
+					logger.error(Constants.LOGGER_ERROR_FETCH_FAILED);
+					throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
 
+				} else {
+					logger.info(Constants.LOGGER_INFO_DISPLAY_SUCCESSFUL);
 
+				}
+			} catch (Exception e) {
 
+				e.printStackTrace();
+				throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+			}
 
+			finally {
 
+				session.close();
+			}
+		 jsonMessage = JsonUtil.convertJavaToJson1(supplierlist);
+			return jsonMessage ;
 
+		}
+	}
+    
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    

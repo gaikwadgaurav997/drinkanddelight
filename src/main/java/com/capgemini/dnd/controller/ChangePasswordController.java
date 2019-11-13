@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.capgemini.dnd.customexceptions.BackEndException;
-import com.capgemini.dnd.customexceptions.InvalidPasswordException;
 import com.capgemini.dnd.customexceptions.PasswordException;
-import com.capgemini.dnd.customexceptions.RowNotFoundException;
-import com.capgemini.dnd.customexceptions.UnregisteredEmployeeException;
 import com.capgemini.dnd.customexceptions.WrongSecurityAnswerException;
 import com.capgemini.dnd.dto.Employee;
 import com.capgemini.dnd.service.EmployeeService;
@@ -67,8 +64,7 @@ public class ChangePasswordController {
 				((ObjectNode) dataResponse).put("message", ControllerConstants.PASSWORD_CHANGE_SUCCESSFUL_MESSAGE);
 				((ObjectNode) dataResponse).put("username", actualEmployee.getUsername());
 			}
-		} catch (UnregisteredEmployeeException | WrongSecurityAnswerException | PasswordException | BackEndException
-				| InvalidPasswordException | RowNotFoundException exception) {
+		} catch (WrongSecurityAnswerException | PasswordException exception) {
 			((ObjectNode) dataResponse).put("message", exception.getMessage());
 		} finally {
 			response.getWriter().print(dataResponse);

@@ -15,9 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.capgemini.dnd.customexceptions.DisplayException;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
+import com.capgemini.dnd.dto.DisplayProductOrder;
+import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
 
 @RunWith(SpringRunner.class)
@@ -211,10 +214,52 @@ class ProductServiceImplTest {
 		assertFalse(productService.doesProductOrderIdExistInStock("5OQ"));
 	}
 	
-	
-//	@Test
-//	void testAddProductOrder() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	@Rollback(true)
+	public void testAddProductOrder() throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		ProductOrder productOrder = new ProductOrder("JUICE","d004",25,"litres", sdf.parse("2019-12-12"),50,"w03");
+		assertEquals(productService.addProductOrder(productOrder),"{\"message\":\"Product Order added successfully\"}");
+	}
 
+	@Test
+	@Rollback(true)
+	public void testUpdateProductDeliveryStatus1() throws Exception  {
+		String actualMessage = null;
+		
+		try {
+			if(productService.doesProductOrderIdExist("5") ){
+			actualMessage = productService.updateStatusProductOrder("5","Dispatched");
+			}
+		} catch (ProductOrderIDDoesNotExistException e) {
+			actualMessage = e.getMessage();
+		}
+		String expectedMessage = "Updated succesfully";
+		assertEquals(actualMessage, "{\"message\":\"Updated succesfully\"}");
+	}
+	
+	@Test
+	@Rollback(true)
+	public void testUpdateProductDeliveryStatus2() throws Exception  {
+		String actualMessage = null;
+		try {
+			if(productService.doesProductOrderIdExist("1000") ){
+			actualMessage = productService.updateStatusProductOrder("5","Dispatched");
+			}
+		} catch (ProductOrderIDDoesNotExistException e) {
+			actualMessage = e.getMessage();
+		}
+		String expectedMessage = "Product Order ID does not exist";
+		assertEquals(expectedMessage, actualMessage);
+	}
+
+//	@Test
+//	@Rollback(true)
+//	public void testDisplayProductOrder() {
+//		DisplayProductOrder displayProductOrder = new DisplayProductOrder("DISPATCHED","SUP1","2019-11-06","2019-11-06");
+//		
+//		assertThrows(DisplayException.class, () -> {
+//			productService.displayProductOrders(displayProductOrder);
+//			});
+//	}
 }
