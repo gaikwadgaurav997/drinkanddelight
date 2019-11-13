@@ -6,5 +6,6 @@ import com.capgemini.dnd.entity.SupplierEntity;
 
 @Repository
 public interface SupplierDAO extends JpaRepository<SupplierEntity, Integer> {
+	
 
 }

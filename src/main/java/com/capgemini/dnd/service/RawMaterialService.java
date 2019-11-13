@@ -6,12 +6,15 @@ import java.util.List;
 
 import com.capgemini.dnd.customexceptions.BackEndException;
 import com.capgemini.dnd.customexceptions.DisplayException;
+import com.capgemini.dnd.customexceptions.DoesNotExistException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProcessDateException;
 import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
 import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
+import com.capgemini.dnd.dto.Distributor;
 import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
+import com.capgemini.dnd.dto.Supplier;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
 
 
@@ -40,5 +43,6 @@ public interface RawMaterialService {
 
 	public ArrayList<String> fetchRawMaterialNames();
 
+	 public String fetchSupplierDetail(Supplier supplierDetails) throws DisplayException;
 }
 

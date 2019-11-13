@@ -1,12 +1,18 @@
 package com.capgemini.dnd.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.capgemini.dnd.customexceptions.BackEndException;
+import com.capgemini.dnd.customexceptions.DisplayException;
+import com.capgemini.dnd.customexceptions.DoesNotExistException;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
+import com.capgemini.dnd.dto.Distributor;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
+import com.capgemini.dnd.entity.DistributorEntity;
 
 public interface ProductService {
 
@@ -31,5 +37,10 @@ public interface ProductService {
 	public ArrayList<String> fetchDistributorIds();
 
 	public ArrayList<String> fetchWarehouseIds();
+
+	
+
+	public String fetchDistributorDetail(Distributor distributor)
+			throws BackEndException, DoesNotExistException, DisplayException;
 	
 }

@@ -5,12 +5,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
- 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capgemini.dnd.customexceptions.BackEndException;
+import com.capgemini.dnd.customexceptions.DisplayException;
+import com.capgemini.dnd.customexceptions.DoesNotExistException;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
@@ -21,6 +29,7 @@ import com.capgemini.dnd.dao.ProductOrdersDAO;
 import com.capgemini.dnd.dao.ProductStockDAO;
 import com.capgemini.dnd.dao.WarehouseDAO;
 import com.capgemini.dnd.dao.ProductSpecsDAO;
+import com.capgemini.dnd.dto.Distributor;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
 import com.capgemini.dnd.entity.DistributorEntity;
@@ -42,7 +51,8 @@ public class ProductServiceImpl implements ProductService {
 
     Logger logger = Logger.getRootLogger();
 
- 
+    @Autowired
+    SessionFactory sessionFactory;
 
     @Autowired
     private ProductStockDAO productStockDAO;
@@ -377,4 +387,48 @@ public class ProductServiceImpl implements ProductService {
 		
 		return warehouseIdsList;
 	}
+
+
+
+	@Override
+	
+		public String fetchDistributorDetail(Distributor distributor) throws DisplayException
+				{
+			
+		    Session session = null;
+			List<DistributorEntity> distributorlist = new ArrayList<DistributorEntity>();
+			String jsonMessage= "";
+			
+			try {
+				session = sessionFactory.openSession();
+				String distributorId = distributor.getDistributorId();
+				CriteriaBuilder builder = session.getCriteriaBuilder();
+				CriteriaQuery<DistributorEntity> criteria = builder.createQuery(DistributorEntity.class);
+				Root<DistributorEntity> root = criteria.from(DistributorEntity.class);
+
+				criteria.select(root).where(builder.equal(root.get("distributorId"), distributorId));
+
+				Query<DistributorEntity> query = session.createQuery(criteria);
+				distributorlist = query.list();
+				if (distributorlist.isEmpty()) {
+					logger.error(Constants.LOGGER_ERROR_FETCH_FAILED);
+					throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+
+				} else {
+					logger.info(Constants.LOGGER_INFO_DISPLAY_SUCCESSFUL);
+
+				}
+			} catch (Exception e) {
+
+				e.printStackTrace();
+				throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
+			}
+
+			finally {
+
+				session.close();
+			}
+			jsonMessage = JsonUtil.convertJavaToJson1(distributorlist);
+			return jsonMessage ;
+		}
 }
