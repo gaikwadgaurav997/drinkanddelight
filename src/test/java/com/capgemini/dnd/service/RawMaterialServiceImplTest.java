@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.capgemini.dnd.customexceptions.DisplayException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProcessDateException;
 import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
+import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
+import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
 
 @RunWith(SpringRunner.class)
@@ -211,5 +215,55 @@ class RawMaterialServiceImplTest {
 	public void testDoesRawMaterialOrderIdExistInStock3() {
 		assertFalse(rawMaterialService.doesRawMaterialOrderIdExistInStock("5OQ"));
 	}
+	
+	@Test
+	@Rollback(true)
+	public void testPlaceRawMaterialOrder() throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		RawMaterialOrder rawMaterialOrder = new RawMaterialOrder("SALT","sup2",75,"kg", sdf.parse("2019-12-22"),25,"w03");
+		assertEquals(rawMaterialService.placeRawMaterialOrder(rawMaterialOrder),"{\"message\":\"Raw Material Order added successfully\"}");
+	}
 
+	@Test
+    @Rollback(true)
+    public void testUpdateRawMaterialDeliveryStatus1() throws Exception{
+        String actualMessage = null;
+        try {
+            if(rawMaterialService.doesRawMaterialOrderIdExist("5") ){
+            actualMessage = rawMaterialService.updateStatusRawMaterialOrder("5","Recieved");
+            }
+        } catch (RMOrderIDDoesNotExistException e) {
+            actualMessage = e.getMessage();
+        }
+        String expectedMessage = "Updated succesfully";
+        assertEquals(actualMessage, "{\"message\":\"Updated succesfully\"}");
+    }
+	
+	@Test
+    @Rollback(true)
+    public void testUpdateRawMaterialDeliveryStatus2() throws Exception{
+        String actualMessage = null;
+        try {
+            if(rawMaterialService.doesRawMaterialOrderIdExist("1000") ){
+            actualMessage = rawMaterialService.updateStatusRawMaterialOrder("5","Recieved");
+            }
+        } catch (RMOrderIDDoesNotExistException e) {
+            actualMessage = e.getMessage();
+        }
+        String expectedMessage = "RawMaterial Order ID does not exist";
+        assertEquals(expectedMessage, actualMessage);
+    }
+	
+
+	@Test
+	@Rollback(true)
+	public void testDisplayRawMaterialOrder() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date today = new Date();
+		DisplayRawMaterialOrder displayRawMaterialOrder = new DisplayRawMaterialOrder("DISPATCHED","SUP1","2019-11-06","2019-11-06");
+		
+		assertThrows(DisplayException.class, () -> {
+			rawMaterialService.displayRawmaterialOrders(displayRawMaterialOrder);
+			});
+	}
 }

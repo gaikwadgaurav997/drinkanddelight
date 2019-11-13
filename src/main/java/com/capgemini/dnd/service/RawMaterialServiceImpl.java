@@ -25,12 +25,18 @@ import com.capgemini.dnd.customexceptions.RMOrderIDDoesNotExistException;
 import com.capgemini.dnd.customexceptions.UpdateException;
 import com.capgemini.dnd.dao.Constants;
 import com.capgemini.dnd.dao.RawMaterialOrdersDAO;
+import com.capgemini.dnd.dao.RawMaterialSpecsDAO;
 import com.capgemini.dnd.dao.RawMaterialStockDAO;
+import com.capgemini.dnd.dao.SupplierDAO;
+import com.capgemini.dnd.dao.WarehouseDAO;
 import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
+import com.capgemini.dnd.dto.RawMaterialOrder;
 import com.capgemini.dnd.dto.RawMaterialStock;
-import com.capgemini.dnd.entity.ProductOrdersEntity;
 import com.capgemini.dnd.entity.RawMaterialOrderEntity;
+import com.capgemini.dnd.entity.RawMaterialSpecsEntity;
 import com.capgemini.dnd.entity.RawMaterialStockEntity;
+import com.capgemini.dnd.entity.SupplierEntity;
+import com.capgemini.dnd.entity.WarehouseEntity;
 import com.capgemini.dnd.util.JsonUtil;
 import com.capgemini.dnd.util.ServiceUtil;
 
@@ -49,12 +55,31 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 	
 	@Autowired
 	private RawMaterialOrdersDAO rawMaterialOrderDAO;
+	
+    @Autowired
+    private RawMaterialSpecsDAO rawMaterialSpecsDAO;
+    
+    @Autowired
+    private SupplierDAO supplierDAO;
+    
+    @Autowired
+    private WarehouseDAO warehouseDAO;
 
     @Autowired
     RawMaterialOrderEntity rawMaterialOrdersEntity;
     
     @Autowired
     RawMaterialStockEntity rawMaterialStockEntity;
+    
+    @Autowired
+    RawMaterialSpecsEntity rawMaterialSpecsEntity;
+    
+    @Autowired
+    SupplierEntity supplierEntity;
+    
+    @Autowired
+    WarehouseEntity warehouseEntity;
+    
 
 
     @Override
@@ -356,30 +381,63 @@ public class RawMaterialServiceImpl implements RawMaterialService {
     	
     }
     
+    @Override
+    public String placeRawMaterialOrder(RawMaterialOrder rawMaterialOrder) {
+
+    rawMaterialOrdersEntity.setName(rawMaterialOrder.getName());
+    rawMaterialOrdersEntity.setSupplierId(rawMaterialOrder.getSupplierId());
+    rawMaterialOrdersEntity.setQuantityValue(rawMaterialOrder.getQuantityValue());
+    rawMaterialOrdersEntity.setQuantityUnit(rawMaterialOrder.getQuantityUnit());
+    rawMaterialOrdersEntity.setDateOfOrder(rawMaterialOrder.getDateOfOrder());
+    rawMaterialOrdersEntity.setDateOfDelivery(rawMaterialOrder.getDateOfDelivery());
+    rawMaterialOrdersEntity.setPricePerUnit(rawMaterialOrder.getPricePerUnit());
+    rawMaterialOrdersEntity.setTotalPrice(rawMaterialOrder.getQuantityValue()*rawMaterialOrder.getPricePerUnit());
+    rawMaterialOrdersEntity.setTotalPrice(rawMaterialOrder.getTotalPrice());
+    rawMaterialOrdersEntity.setDeliveryStatus(rawMaterialOrder.getDeliveryStatus());
+    rawMaterialOrdersEntity.setWarehouseId(rawMaterialOrder.getWarehouseId());
+
+    rawMaterialOrderDAO.saveAndFlush(rawMaterialOrdersEntity);
+    String jsonMessage = JsonUtil.convertJavaToJson(Constants.RM_ORDER_ADDED);
+    return jsonMessage;
+    }
+    
+    @Override
+	public ArrayList<String> fetchRawMaterialNames() {
+		ArrayList<String> rawMaterialNamesList = new ArrayList<String>();
+		List<RawMaterialSpecsEntity> rawMaterialSpecsEntityObject = rawMaterialSpecsDAO.findAll();
+		
+		for (RawMaterialSpecsEntity rawMaterialSpecsEntity : rawMaterialSpecsEntityObject) {
+			rawMaterialNamesList.add(rawMaterialSpecsEntity.getName());
+		}
+		
+		return rawMaterialNamesList;
+	}
+	
+	@Override
+	public ArrayList<String> fetchSupplierIds() {
+		ArrayList<String> supplierNamesList = new ArrayList<String>();
+		List<SupplierEntity> supplierEntityObject = supplierDAO.findAll();
+		
+		for (SupplierEntity supplierEntity : supplierEntityObject) {
+			supplierNamesList.add(supplierEntity.getSupplierId());
+		}
+		
+		return supplierNamesList;
+	}
+    
+    @Override
+	public ArrayList<String> fetchWarehouseIds() {
+		ArrayList<String> warehouseIdsList = new ArrayList<String>();
+		List<WarehouseEntity> warehouseEntityObject = warehouseDAO.findAll();
+		
+		for (WarehouseEntity warehouseEntity : warehouseEntityObject) {
+			warehouseIdsList.add(warehouseEntity.getWarehouseId());
+		}
+		
+		return warehouseIdsList;
+	}
+    
+    
+
+    
 }
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
