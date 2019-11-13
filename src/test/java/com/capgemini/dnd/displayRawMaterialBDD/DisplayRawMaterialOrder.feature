@@ -11,7 +11,7 @@ And User is on display raw material order page
 When User entered the Delivery Status as "All"
 And User selects the SupplierId as "All"
 And User enters start date as "2019-11-10"
-And User enters end date as "2020-11-10"
+And User enters end date as "2019-11-10"
 
 
 Then "No Records Found" is displayed
