@@ -3,7 +3,7 @@ Feature: Track Raw Material Order
 Scenario: Tracking a particular raw material order
 
 Given User is on login page
-And User enters login credentials
+And User enters login credential
 And User selects Track Raw Material Option from Raw Material dropdown
 And User is on track raw material order page 
 When User enters number in the order ID field as "7"

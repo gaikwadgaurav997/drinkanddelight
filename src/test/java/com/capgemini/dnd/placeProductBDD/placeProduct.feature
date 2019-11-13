@@ -2,7 +2,7 @@ Feature: Place Product Order
 
 Scenario: Placing a particular product order
 
-Given User is on drink and delight login page
+Given User is on drink and delight login pages
 And User enters login credentials
 And User selects Place Product Option from Product dropdown
 And User is on place product order page 
