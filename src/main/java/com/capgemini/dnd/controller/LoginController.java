@@ -29,14 +29,14 @@ public class LoginController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	private Employee employee = null;
+	@Autowired
+	private Employee employee;
 
 	@RequestMapping(method = RequestMethod.POST)
 	public void login(HttpServletRequest request, HttpServletResponse response)
 			throws BackEndException, JsonParseException, JsonMappingException, IOException {
 		Map<String, String> fieldValueMap = MappingUtil.convertJsonObjectToFieldValueMap(request);
 		
-		employee = new Employee();
 		employee.setUsername(fieldValueMap.get("username"));
 		employee.setPassword(fieldValueMap.get("password"));
 		
