@@ -51,6 +51,13 @@ public class UpdateProductStockStepDefinition {
 
 	@Given("User selects Update Stock Option from Product dropdown")
 	public void user_selects_Update_Stock_Option_from_Product_dropdown() {
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+		}
+		
 		WebElement productBtn = driver
 				.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[3]/div/button"));
 		JavascriptExecutor jsRMButton = (JavascriptExecutor) driver;

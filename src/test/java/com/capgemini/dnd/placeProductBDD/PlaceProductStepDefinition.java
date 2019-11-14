@@ -27,12 +27,12 @@ public class PlaceProductStepDefinition {
 	public void user_is_on_drink_and_delight_login_page() {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("start-maximized");
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\prapai\\Downloads\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\gauragai\\Downloads\\chromedriver.exe");
 		driver = new ChromeDriver(options);
 		driver.get("http://localhost:4200/");
 	}
 
-	@Given("User enters login credential")
+	@Given("User enters login credentials")
 	public void user_enters_login_credentials_given() {
 		driver.findElement(By.name("username")).sendKeys("saurabh123");
 		driver.findElement(By.name("password")).sendKeys("hello");

@@ -1,6 +1,5 @@
 package com.capgemini.dnd.displayRawMaterialBDD;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -30,7 +29,7 @@ public class DisplayRawMaterialStepDefinition {
 
 		// options.addArguments("disable-web-security");
 
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\amolugur\\Downloads\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\gauragai\\Downloads\\chromedriver.exe");
 		driver = new ChromeDriver(options);
 		driver.get("http://localhost:4200/");
 	}
@@ -51,6 +50,17 @@ public class DisplayRawMaterialStepDefinition {
 
 	@Given("User selects Display all orders from RawMaterial dropdown")
 	public void user_selects_Display_all_orders_from_RawMaterial_dropdown() {
+<<<<<<< HEAD
+		
+		try {
+			Thread.sleep(5000);
+=======
+		try {
+			Thread.sleep(3000);
+>>>>>>> 56670262cf7aa4845eae4a00a099f0e9739bb33b
+		} catch (InterruptedException e) {
+
+		}
 
 		WebElement rmBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[2]/div/button"));
 		JavascriptExecutor jsRMButton = (JavascriptExecutor)driver;
@@ -63,7 +73,7 @@ public class DisplayRawMaterialStepDefinition {
 		}
 
 	    
-	    WebElement trackBtn = driver.findElement(By.xpath("//*[@id=\"collapsibleNavbar\"]/ul/li[2]/div/div/a[2]"));
+	    WebElement trackBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[2]/div/div/a[2]"));
 		JavascriptExecutor jsButton = (JavascriptExecutor)driver;
 		jsButton.executeScript("arguments[0].click();", trackBtn);
 		try {
@@ -119,6 +129,29 @@ public class DisplayRawMaterialStepDefinition {
 			endDateInput.sendKeys(string);
 		   
 	}
+<<<<<<< HEAD
+	    
+	    @When("User clicks on the Submit button to get the results")
+	    public void user_clicks_on_the_Submit_button_to_get_the_results() {
+	    	WebElement loginBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-display-rawmaterial-orders/div/div[3]/button"));
+			JavascriptExecutor jsButton = (JavascriptExecutor) driver;
+			jsButton.executeScript("arguments[0].click();", loginBtn);
+	    }
+	    
+=======
+	    @When("User clicked on submit")
+		public void User_clicked_on_submit() {
+			WebElement submitbtn = driver.findElement(By.xpath("/html/body/app-root/body/app-display-rawmaterial-orders/div/div[3]/button"));
+			JavascriptExecutor jsButton = (JavascriptExecutor)driver;
+			jsButton.executeScript("arguments[0].submit();", submitbtn);
+			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				}
+		}
+>>>>>>> 56670262cf7aa4845eae4a00a099f0e9739bb33b
+	    
 	@Then("{string} is displayed")
 	public void is_displayed(String string) {
 		try {
@@ -133,6 +166,18 @@ public class DisplayRawMaterialStepDefinition {
 		Assert.assertEquals(string, outputValue);
 	   
 	}
+	
+<<<<<<< HEAD
+	@After
+	public void tearDown() {
+		driver.quit();
+	}
+=======
+//	@After
+//	public void tearDown() {
+//		driver.quit();
+//	}
+>>>>>>> 56670262cf7aa4845eae4a00a099f0e9739bb33b
 
 
 }

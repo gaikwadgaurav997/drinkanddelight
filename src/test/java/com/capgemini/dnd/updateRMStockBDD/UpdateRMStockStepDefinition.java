@@ -52,6 +52,13 @@ public class UpdateRMStockStepDefinition {
 
 	@Given("User selects Update Stock Option from Raw Material dropdown")
 	public void user_selects_Update_Stock_Option_from_Raw_Material_dropdown() {
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+		}
+		
 		WebElement rmBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[2]/div/button"));
 		JavascriptExecutor jsRMButton = (JavascriptExecutor)driver;
 		jsRMButton.executeScript("arguments[0].click();", rmBtn);

@@ -38,7 +38,7 @@ public class TrackRMStepDefinition {
 	public void user_enters_login_credentials() {
 		driver.findElement(By.name("username")).sendKeys("saurabh123");
 		driver.findElement(By.name("password")).sendKeys("hello");
-		WebElement loginBtn = driver.findElement(By.xpath("//*[@id=\"homepage\"]/div/div/div/div[2]/form/button"));
+		WebElement loginBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-login/body/div/div/div/div[2]/form/button"));
 		JavascriptExecutor jsButton = (JavascriptExecutor)driver;
 		jsButton.executeScript("arguments[0].click();", loginBtn);
 		try {
@@ -52,6 +52,12 @@ public class TrackRMStepDefinition {
 	@Given("User selects Track Raw Material Option from Raw Material dropdown")
 	public void user_selects_Track_Raw_Material_Option_from_Raw_Material_dropdown() {
 		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			
+		}
+		
 		WebElement rmBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[2]/div/button"));
 		JavascriptExecutor jsRMButton = (JavascriptExecutor)driver;
 		jsRMButton.executeScript("arguments[0].click();", rmBtn);
@@ -63,7 +69,7 @@ public class TrackRMStepDefinition {
 		}
 
 	    
-	    WebElement trackBtn = driver.findElement(By.xpath("//*[@id=\"collapsibleNavbar\"]/ul/li[2]/div/div/a[6]"));
+	    WebElement trackBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[2]/div/div/a[6]"));
 		JavascriptExecutor jsButton = (JavascriptExecutor)driver;
 		jsButton.executeScript("arguments[0].click();", trackBtn);
 		try {

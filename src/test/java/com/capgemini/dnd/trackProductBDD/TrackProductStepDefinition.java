@@ -29,7 +29,7 @@ public class TrackProductStepDefinition {
 
 		// options.addArguments("disable-web-security");
 
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\gauragai\\Downloads\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\akdeep\\Desktop\\chromedriver.exe");
 		driver = new ChromeDriver(options);
 		driver.get("http://localhost:4200/");
 	}
@@ -38,7 +38,7 @@ public class TrackProductStepDefinition {
 	public void user_enters_login_credentials_given() {
 		driver.findElement(By.name("username")).sendKeys("saurabh123");
 		driver.findElement(By.name("password")).sendKeys("hello");
-		WebElement loginBtn = driver.findElement(By.xpath("//*[@id=\"homepage\"]/div/div/div/div[2]/form/button"));
+		WebElement loginBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-login/body/div/div/div/div[2]/form/button"));
 		JavascriptExecutor jsButton = (JavascriptExecutor) driver;
 		jsButton.executeScript("arguments[0].click();", loginBtn);
 		try {
@@ -50,6 +50,13 @@ public class TrackProductStepDefinition {
 
 	@Given("User selects Track Product Option from Product dropdown")
 	public void user_selects_Track_Product_Option_from_Product_dropdown() {
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+		}
+		
 		WebElement productBtn = driver
 				.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[3]/div/button"));
 		JavascriptExecutor jsRMButton = (JavascriptExecutor) driver;
@@ -86,6 +93,13 @@ public class TrackProductStepDefinition {
 
 	@When("user clicked on track order button")
 	public void user_clicked_on_track_order_button() {
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			
+		}
+		
 		WebElement randomClick = driver
 				.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[3]/div/button"));
 		JavascriptExecutor jsRandom = (JavascriptExecutor) driver;

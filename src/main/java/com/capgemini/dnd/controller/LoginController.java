@@ -40,11 +40,9 @@ public class LoginController {
 		employee.setUsername(fieldValueMap.get("username"));
 		employee.setPassword(fieldValueMap.get("password"));
 		
-		System.out.println(request.getParameter("username") + request.getParameter("password"));
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode dataResponse = mapper.createObjectNode();
 		try {
-			System.out.println("ckskcnsdfkv " + employeeService.login(employee));
 			if (employeeService.login(employee)) {
 				((ObjectNode) dataResponse).put("message", ControllerConstants.LOGIN_SUCCESSFUL_MESSAGE);
 				((ObjectNode) dataResponse).put("username", employee.getUsername());
