@@ -50,14 +50,14 @@ public class DisplayRawMaterialStepDefinition {
 
 	@Given("User selects Display all orders from RawMaterial dropdown")
 	public void user_selects_Display_all_orders_from_RawMaterial_dropdown() {
-<<<<<<< HEAD
+
 		
 		try {
 			Thread.sleep(5000);
-=======
+
 		try {
 			Thread.sleep(3000);
->>>>>>> 56670262cf7aa4845eae4a00a099f0e9739bb33b
+
 		} catch (InterruptedException e) {
 
 		}
@@ -129,7 +129,7 @@ public class DisplayRawMaterialStepDefinition {
 			endDateInput.sendKeys(string);
 		   
 	}
-<<<<<<< HEAD
+
 	    
 	    @When("User clicks on the Submit button to get the results")
 	    public void user_clicks_on_the_Submit_button_to_get_the_results() {
@@ -138,19 +138,7 @@ public class DisplayRawMaterialStepDefinition {
 			jsButton.executeScript("arguments[0].click();", loginBtn);
 	    }
 	    
-=======
-	    @When("User clicked on submit")
-		public void User_clicked_on_submit() {
-			WebElement submitbtn = driver.findElement(By.xpath("/html/body/app-root/body/app-display-rawmaterial-orders/div/div[3]/button"));
-			JavascriptExecutor jsButton = (JavascriptExecutor)driver;
-			jsButton.executeScript("arguments[0].submit();", submitbtn);
-			
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				}
-		}
->>>>>>> 56670262cf7aa4845eae4a00a099f0e9739bb33b
+
 	    
 	@Then("{string} is displayed")
 	public void is_displayed(String string) {
@@ -167,17 +155,13 @@ public class DisplayRawMaterialStepDefinition {
 	   
 	}
 	
-<<<<<<< HEAD
+
+
 	@After
 	public void tearDown() {
 		driver.quit();
 	}
-=======
-//	@After
-//	public void tearDown() {
-//		driver.quit();
-//	}
->>>>>>> 56670262cf7aa4845eae4a00a099f0e9739bb33b
+
 
 
 }
