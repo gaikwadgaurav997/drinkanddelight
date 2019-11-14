@@ -39,9 +39,7 @@ public class DisplayRawMaterialController {
 	    	String jsonMessage = "";
 			String errorMessage = "";
 			PrintWriter out = response.getWriter();
-			ModelAndView mav = new ModelAndView();
 			DisplayRawMaterialOrder displayRawMaterialOrderObject = new DisplayRawMaterialOrder();
-			//RawMaterialService rawmaterialServiceObject =new RawMaterialServiceImpl();
 			Map<String, String> fieldValueMap = new HashMap<String, String>();
 			fieldValueMap = MappingUtil.convertJsonObjectToFieldValueMap(request);
 		
@@ -67,8 +65,6 @@ public class DisplayRawMaterialController {
 				
 
 				System.out.println(jsonMessage);
-				mav.addObject("msg", jsonMessage);
-				System.out.println(mav);
 				out.write(jsonMessage);
 			}
 			
