@@ -29,7 +29,7 @@ public class TrackProductStepDefinition {
 
 		// options.addArguments("disable-web-security");
 
-		System.setProperty("webdriver.chrome.driver", "C:\\Users\\akdeep\\Desktop\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\gauragai\\Downloads\\chromedriver.exe");
 		driver = new ChromeDriver(options);
 		driver.get("http://localhost:4200/");
 	}
@@ -130,7 +130,7 @@ public class TrackProductStepDefinition {
 	@Then("A message {string} is displayed below")
 	public void a_message_is_displayed_below(String string) {
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 		}
 

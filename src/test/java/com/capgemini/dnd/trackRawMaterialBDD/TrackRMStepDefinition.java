@@ -132,7 +132,7 @@ public class TrackRMStepDefinition {
 	@Then("A message {string} is displayed in the blank space below")
 	public void a_message_is_displayed_in_the_blank_space_below(String string) {
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			}
 		

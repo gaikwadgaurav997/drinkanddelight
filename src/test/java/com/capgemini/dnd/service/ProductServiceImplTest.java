@@ -15,11 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.capgemini.dnd.customexceptions.DisplayException;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
-import com.capgemini.dnd.dto.DisplayProductOrder;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
 
@@ -234,8 +232,8 @@ class ProductServiceImplTest {
 		} catch (ProductOrderIDDoesNotExistException e) {
 			actualMessage = e.getMessage();
 		}
-		String expectedMessage = "Updated succesfully";
-		assertEquals(actualMessage, "{\"message\":\"Updated succesfully\"}");
+		String expectedMessage = "{\"message\":\"Updated succesfully\"}";
+		assertEquals(actualMessage, expectedMessage);
 	}
 	
 	@Test

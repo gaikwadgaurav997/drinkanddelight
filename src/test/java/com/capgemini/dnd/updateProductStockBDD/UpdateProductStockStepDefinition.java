@@ -133,7 +133,7 @@ public class UpdateProductStockStepDefinition {
 	@Then("The message {string} is shown")
 	public void the_message_is_shown(String string) {
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(20000);
 		} catch (InterruptedException e) {
 		}
 

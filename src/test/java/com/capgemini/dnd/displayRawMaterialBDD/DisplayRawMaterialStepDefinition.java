@@ -14,6 +14,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import junit.framework.Assert;
 
+@SuppressWarnings("deprecation")
 public class DisplayRawMaterialStepDefinition {
 
 	public DisplayRawMaterialStepDefinition() {
@@ -54,9 +55,6 @@ public class DisplayRawMaterialStepDefinition {
 		
 		try {
 			Thread.sleep(5000);
-
-		try {
-			Thread.sleep(3000);
 
 		} catch (InterruptedException e) {
 
@@ -155,7 +153,6 @@ public class DisplayRawMaterialStepDefinition {
 	   
 	}
 	
-
 
 	@After
 	public void tearDown() {

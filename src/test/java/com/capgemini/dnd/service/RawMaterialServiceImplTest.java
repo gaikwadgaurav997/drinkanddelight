@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -235,8 +234,8 @@ class RawMaterialServiceImplTest {
         } catch (RMOrderIDDoesNotExistException e) {
             actualMessage = e.getMessage();
         }
-        String expectedMessage = "Updated succesfully";
-        assertEquals(actualMessage, "{\"message\":\"Updated succesfully\"}");
+        String expectedMessage = "{\"message\":\"Updated succesfully\"}";
+        assertEquals(actualMessage, expectedMessage);
     }
 	
 	@Test
@@ -258,8 +257,8 @@ class RawMaterialServiceImplTest {
 	@Test
 	@Rollback(true)
 	public void testDisplayRawMaterialOrder() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date today = new Date();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//		Date today = new Date();
 		DisplayRawMaterialOrder displayRawMaterialOrder = new DisplayRawMaterialOrder("DISPATCHED","SUP1","2019-11-06","2019-11-06");
 		
 		assertThrows(DisplayException.class, () -> {

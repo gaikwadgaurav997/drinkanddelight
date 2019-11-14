@@ -1,7 +1,6 @@
 package com.capgemini.dnd.service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.capgemini.dnd.customexceptions.BackEndException;
 import com.capgemini.dnd.customexceptions.DisplayException;
@@ -13,7 +12,6 @@ import com.capgemini.dnd.dto.DisplayProductOrder;
 import com.capgemini.dnd.dto.Distributor;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
-import com.capgemini.dnd.entity.DistributorEntity;
 
 public interface ProductService {
 

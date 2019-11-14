@@ -118,7 +118,7 @@ public class UpdateRawMaterialOrderStepdefinition {
 	public void close() {
 //		System.out.println("Closing the driver.");
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(15000);
 		} catch (InterruptedException e) {}
 		if (driver != null) {
 			driver.quit();

@@ -132,7 +132,7 @@ public class UpdateRMStockStepDefinition {
 	@Then("The message {string} is displayed")
 	public void the_message_is_displayed(String string) {
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(25000);
 		} catch (InterruptedException e) {
 			}
 		

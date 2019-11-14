@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,6 +139,7 @@ class EmployeeServiceImplTest {
 		}
 	}
 	
+
 	@Test
 	@Rollback(true)
 	public void testChangePassword2() throws BackEndException, WrongSecurityAnswerException {

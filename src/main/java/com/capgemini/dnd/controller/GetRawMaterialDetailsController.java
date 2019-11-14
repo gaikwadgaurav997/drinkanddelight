@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capgemini.dnd.customexceptions.ConnectionException;
-import com.capgemini.dnd.customexceptions.DisplayException;
 import com.capgemini.dnd.service.RawMaterialService;
 import com.capgemini.dnd.util.JsonUtil;
 import com.fasterxml.jackson.core.JsonParseException;

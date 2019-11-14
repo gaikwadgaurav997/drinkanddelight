@@ -19,9 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.capgemini.dnd.customexceptions.BackEndException;
 import com.capgemini.dnd.customexceptions.DisplayException;
 import com.capgemini.dnd.dto.DisplayProductOrder;
-import com.capgemini.dnd.dto.DisplayRawMaterialOrder;
 import com.capgemini.dnd.service.ProductService;
-import com.capgemini.dnd.service.RawMaterialService;
 import com.capgemini.dnd.util.MappingUtil;
 
 @Controller
