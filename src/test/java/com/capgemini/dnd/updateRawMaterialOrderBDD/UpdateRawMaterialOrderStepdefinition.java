@@ -12,7 +12,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 
 public class UpdateRawMaterialOrderStepdefinition {
-	String chromeDriverPath = "C:\\Users\\akum1031\\Downloads\\chromedriver.exe";
+	String chromeDriverPath = "C:\\Users\\gauragai\\Downloads\\chromedriver.exe";
 	WebDriver driver = null;
 
 	@Given("I am on drinkanddelight login page")
@@ -89,35 +89,40 @@ public class UpdateRawMaterialOrderStepdefinition {
 		} catch (InterruptedException e) {
 			
 		}
-		driver.findElement(By.id("orderID")).sendKeys(string);
+		driver.findElement(By.xpath("/html/body/app-root/body/app-update-rawmaterial-order/div[1]/div[1]/div[2]/input")).sendKeys(string);
 	}
 
 	@When("I enter Delivery Status as {string}")
 	public void i_enter_Delivery_Status_as(String string) {
-		Select dropdown = new Select(driver.findElement(By.id("DeliveryStatus")));
-		dropdown.selectByVisibleText("Pending");
+		Select dropdown = new Select(driver.findElement(By.xpath("/html/body/app-root/body/app-update-rawmaterial-order/div[1]/div[2]/div[2]/select")));
+		dropdown.selectByVisibleText(string);
 	}
 
 	@When("I click on Update Order button")
-	public void i_click_on_button(String string) {
+	public void i_click_on_button() {
 		try {
 			Thread.sleep(5000);
-		} catch (InterruptedException e) {
+		} catch (InterruptedException e) {}
 			
 		WebElement updateBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-update-rawmaterial-order/div[1]/button"));
 		JavascriptExecutor jsRMupdateButton = (JavascriptExecutor)driver;
 		jsRMupdateButton.executeScript("arguments[0].click();",updateBtn);
 		
-		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {}
 		}
 		
-	}
-//	@After
-//	public void close() {
+	
+	@After
+	public void close() {
 //		System.out.println("Closing the driver.");
-//		if (driver != null) {
-//			driver.quit();
-//		}
-//	}
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {}
+		if (driver != null) {
+			driver.quit();
+		}
+	}
 
 }

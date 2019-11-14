@@ -51,6 +51,12 @@ public class UpdateExitDateStepDefinition {
 
 	@Given("User selects Update Exit Date Option from Product dropdown")
 	public void user_selects_Update_Exit_Date_Option_from_Product_dropdown() {
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+		}
+		
 		WebElement productBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[3]/div/button"));
 		JavascriptExecutor jsRMButton = (JavascriptExecutor)driver;
 		jsRMButton.executeScript("arguments[0].click();", productBtn);
@@ -111,7 +117,7 @@ public class UpdateExitDateStepDefinition {
 	@Then("The message {string} is displayed in the space below")
 	public void the_message_is_displayed_in_the_space_below(String string) {
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			}
 		

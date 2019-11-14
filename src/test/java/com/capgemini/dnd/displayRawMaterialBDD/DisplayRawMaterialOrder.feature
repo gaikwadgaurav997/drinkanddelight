@@ -12,6 +12,6 @@ When User entered the Delivery Status as "All"
 And User selects the SupplierId as "All"
 And User enters start date as "2019-11-10"
 And User enters end date as "2019-11-10"
-
+And User clicks on the Submit button to get the results
 
 Then "No Records Found" is displayed

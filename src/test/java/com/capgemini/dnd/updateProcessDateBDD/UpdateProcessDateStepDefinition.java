@@ -49,6 +49,12 @@ public class UpdateProcessDateStepDefinition {
 
 	@Given("User selects Update Process Date Option from Raw Material dropdown")
 	public void user_selects_Update_Process_Date_Option_from_Raw_Material_dropdown() {
+		
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+
+		}
 		WebElement rmBtn = driver.findElement(By.xpath("/html/body/app-root/body/app-header/nav/div/ul/li[2]/div/button"));
 		JavascriptExecutor jsRMButton = (JavascriptExecutor)driver;
 		jsRMButton.executeScript("arguments[0].click();", rmBtn);
@@ -109,7 +115,7 @@ public class UpdateProcessDateStepDefinition {
 	@Then("The message such as {string} is displayed")
 	public void the_message_such_as_is_displayed(String string) {
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(9000);
 		} catch (InterruptedException e) {
 			}
 		
