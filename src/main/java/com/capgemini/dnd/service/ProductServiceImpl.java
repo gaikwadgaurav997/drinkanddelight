@@ -490,7 +490,7 @@ public class ProductServiceImpl implements ProductService {
 
 			if (startDate != null && endDate != null) {
 				criteria.select(root)
-						.where(builder.between(root.get("dateOfDelivery"), sdf.parse(startDate), sdf.parse(endDate)));
+						.where(builder.between(root.get("dateofDelivery"), sdf.parse(startDate), sdf.parse(endDate)));
 
 			}
 
@@ -505,7 +505,7 @@ public class ProductServiceImpl implements ProductService {
 			}
 		} catch (Exception e) {
 
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new DisplayException(Constants.DISPLAY_EXCEPTION_NO_RECORDS_FOUND);
 		}
 

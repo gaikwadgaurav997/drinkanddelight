@@ -15,9 +15,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.capgemini.dnd.customexceptions.DisplayException;
 import com.capgemini.dnd.customexceptions.ExitDateException;
 import com.capgemini.dnd.customexceptions.IncompleteDataException;
 import com.capgemini.dnd.customexceptions.ProductOrderIDDoesNotExistException;
+import com.capgemini.dnd.dto.DisplayProductOrder;
 import com.capgemini.dnd.dto.ProductOrder;
 import com.capgemini.dnd.dto.ProductStock;
 
@@ -124,7 +126,7 @@ class ProductServiceImplTest {
 	
 	@Test
 	@Rollback(true)
-	public void testUpdateProcessDateinStock1() throws ParseException {
+	public void testUpdateExitDateinStock1() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		ProductStock productStock = new ProductStock("5", sdf.parse("2019-10-09"));
 		String actualMessage = null;
@@ -142,13 +144,13 @@ class ProductServiceImplTest {
 		
 	@Test
 	@Rollback(true)
-	public void testUpdateProcessDateinStock2() throws ParseException {
+	public void testUpdateExitDateinStock2() throws ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		ProductStock productStock = new ProductStock("500", sdf.parse("2019-10-09"));
 		String actualMessage = null;
 		try {
 			if(productService.doesProductOrderIdExist(productStock.getOrderId())) {
-			actualMessage = productService.trackProductOrder(productStock);
+			actualMessage = productService.updateExitDateinStock(productStock);
 			}
 		} catch (ProductOrderIDDoesNotExistException e) {
 			actualMessage = e.getMessage();
@@ -251,13 +253,13 @@ class ProductServiceImplTest {
 		assertEquals(expectedMessage, actualMessage);
 	}
 
-//	@Test
-//	@Rollback(true)
-//	public void testDisplayProductOrder() {
-//		DisplayProductOrder displayProductOrder = new DisplayProductOrder("DISPATCHED","SUP1","2019-11-06","2019-11-06");
-//		
-//		assertThrows(DisplayException.class, () -> {
-//			productService.displayProductOrders(displayProductOrder);
-//			});
-//	}
+	@Test
+	@Rollback(true)
+	public void testDisplayProductOrder() {
+		DisplayProductOrder displayProductOrder = new DisplayProductOrder("DISPATCHED","SUP1","2019-11-06","2019-11-06");
+		
+		assertThrows(DisplayException.class, () -> {
+			productService.displayProductOrders(displayProductOrder);
+			});
+	}
 }

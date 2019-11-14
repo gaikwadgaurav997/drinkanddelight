@@ -151,7 +151,7 @@ class RawMaterialServiceImplTest {
 		String actualMessage = null;
 		try {
 			if(rawMaterialService.doesRawMaterialOrderIdExist(rawMaterialStock.getOrderId())) {
-			actualMessage = rawMaterialService.trackRawMaterialOrder(rawMaterialStock);
+			actualMessage = rawMaterialService.updateProcessDateinStock(rawMaterialStock);
 			}
 		} catch (RMOrderIDDoesNotExistException e) {
 			actualMessage = e.getMessage();
