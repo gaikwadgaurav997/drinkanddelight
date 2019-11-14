@@ -13,7 +13,7 @@ import io.cucumber.java.en.When;
 
 public class LoginStepDefinition {
 
-	String chromeDriverPath = "C:\\Users\\akdeep\\Desktop\\chromedriver.exe";
+	String chromeDriverPath = "C:\\Users\\gauragai\\Downloads\\chromedriver.exe";
 	WebDriver driver = null;
 
 	@Given("I am on drinkanddelight login page")

@@ -79,5 +79,10 @@ public class Constants {
 	public static final String INVALID_MANUFACTURING_DATE = "You cant enter a future manufacturing date";
 	public static final String INVALID_EXPIRY_DATE = "You cant enter expiry date before manufacturing date";
 	public static final String INCOMPLETE_INFORMATION_UPDATE_DATABASE = "Data Incomplete....Update the Information in Database";
-	
+    public static final Object RM_NAMES_NOT_FETCHED = "Raw Material Names not added";
+    public static final Object SUPPLIER_IDS_NOT_FETCHED = "Supplier IDs not fetched";
+    public static final Object WID_NAMES_NOT_FETCHED = "Warehouse IDs not fetched";
+	public static final Object PRODUCT_NAMES_NOT_FETCHED = "Product Names not fetched";
+	public static final Object DISTRIBUTOR_IDS_NOT_FETCHED = "Distributor IDs not fetched";
+
 }

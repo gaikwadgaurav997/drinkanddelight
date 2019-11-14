@@ -31,7 +31,6 @@ class RawMaterialServiceImplTest {
 	private RawMaterialService rawMaterialService;
 	
 	@Test
-	@Rollback(true)
 	public void testTrackRawMaterialOrder1() {
 
 		RawMaterialStock rawMaterialStock = new RawMaterialStock("2");
@@ -49,7 +48,6 @@ class RawMaterialServiceImplTest {
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testTrackRawMaterialOrder2() {
 
 		RawMaterialStock rawMaterialStock = new RawMaterialStock("500");
@@ -67,13 +65,11 @@ class RawMaterialServiceImplTest {
 	}
 
 	@Test
-	@Rollback(true)
 	public void testDoesRawMaterialOrderIdExist1() throws RMOrderIDDoesNotExistException {
 		assertTrue(rawMaterialService.doesRawMaterialOrderIdExist("5"));
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testDoesRawMaterialOrderIdExist2() throws RMOrderIDDoesNotExistException {
 		
 		assertThrows(RMOrderIDDoesNotExistException.class, () -> {
@@ -82,7 +78,6 @@ class RawMaterialServiceImplTest {
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testDoesRawMaterialOrderIdExist3() throws RMOrderIDDoesNotExistException {
 		
 		assertThrows(RMOrderIDDoesNotExistException.class, () -> {
@@ -91,7 +86,6 @@ class RawMaterialServiceImplTest {
 	}
 
 	@Test
-	@Rollback(true)
 	public void testProcessDateCheck1() throws ProcessDateException, IncompleteDataException, ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		RawMaterialStock rawMaterialStock = new RawMaterialStock("1",sdf.parse("2019-10-09"));
@@ -103,7 +97,6 @@ class RawMaterialServiceImplTest {
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testProcessDateCheck2() throws ProcessDateException, IncompleteDataException, ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		RawMaterialStock rawMaterialStock = new RawMaterialStock("1",sdf.parse("2020-10-09"));
@@ -114,7 +107,6 @@ class RawMaterialServiceImplTest {
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testProcessDateCheck3() throws ProcessDateException, IncompleteDataException, ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		RawMaterialStock rawMaterialStock = new RawMaterialStock("1",sdf.parse("2010-10-09"));
@@ -198,19 +190,16 @@ class RawMaterialServiceImplTest {
 	
 
 	@Test
-	@Rollback(true)
 	public void testDoesRawMaterialOrderIdExistInStock1() {
 		assertTrue(rawMaterialService.doesRawMaterialOrderIdExistInStock("5"));
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testDoesRawMaterialOrderIdExistInStock2() {
 		assertFalse(rawMaterialService.doesRawMaterialOrderIdExistInStock("500"));
 	}
 	
 	@Test
-	@Rollback(true)
 	public void testDoesRawMaterialOrderIdExistInStock3() {
 		assertFalse(rawMaterialService.doesRawMaterialOrderIdExistInStock("5OQ"));
 	}
@@ -255,7 +244,6 @@ class RawMaterialServiceImplTest {
 	
 
 	@Test
-	@Rollback(true)
 	public void testDisplayRawMaterialOrder() {
 //		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //		Date today = new Date();

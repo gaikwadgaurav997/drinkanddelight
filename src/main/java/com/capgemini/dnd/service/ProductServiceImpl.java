@@ -345,8 +345,8 @@ public class ProductServiceImpl implements ProductService {
 		productOrdersEntity.setWarehouseId(productOrder.getWarehouseId());
 
 		productOrderDAO.saveAndFlush(productOrdersEntity);
-
 		String jsonMessage = JsonUtil.convertJavaToJson(Constants.PRODUCT_ORDER_ADDED);
+		logger.info(jsonMessage);
 		return jsonMessage;
 
 	}
@@ -381,7 +381,11 @@ public class ProductServiceImpl implements ProductService {
 		for (ProductSpecsEntity productSpecsEntity : productSpecsEntityObject) {
 			productNamesList.add(productSpecsEntity.getName());
 		}
-
+		if(productSpecsEntityObject.size()>0)
+            logger.info(Constants.PRODUCT_NAMES_FETCHED);
+        else {
+            logger.error(Constants.PRODUCT_NAMES_NOT_FETCHED);
+        }
 		return productNamesList;
 	}
 
@@ -394,6 +398,12 @@ public class ProductServiceImpl implements ProductService {
 			distributorNamesList.add(distributorEntity.getDistributorId());
 		}
 
+
+		if(distributorEntityObject.size()>0)
+            logger.info(Constants.DISTRIBUTOR_IDS_FETCHED);
+        else {
+            logger.error(Constants.DISTRIBUTOR_IDS_NOT_FETCHED);
+        }
 		return distributorNamesList;
 	}
 
@@ -405,7 +415,11 @@ public class ProductServiceImpl implements ProductService {
 		for (WarehouseEntity warehouseEntity : warehouseEntityObject) {
 			warehouseIdsList.add(warehouseEntity.getWarehouseId());
 		}
-
+		if(warehouseEntityObject.size()>0)
+            logger.info(Constants.WID_NAMES_FETCHED);
+        else {
+            logger.error(Constants.WID_NAMES_NOT_FETCHED);
+        }
 		return warehouseIdsList;
 	}
 

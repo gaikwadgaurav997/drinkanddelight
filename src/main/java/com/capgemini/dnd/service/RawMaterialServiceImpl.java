@@ -432,6 +432,7 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 
 		rawMaterialOrderDAO.saveAndFlush(rawMaterialOrdersEntity);
 		String jsonMessage = JsonUtil.convertJavaToJson(Constants.RM_ORDER_ADDED);
+		logger.info(jsonMessage);
 		return jsonMessage;
 	}
 
@@ -444,6 +445,11 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 			rawMaterialNamesList.add(rawMaterialSpecsEntity.getName());
 		}
 
+		if(rawMaterialSpecsEntityObject.size()>0)
+            logger.info(Constants.RM_NAMES_FETCHED);
+        else {
+            logger.error(Constants.RM_NAMES_NOT_FETCHED);
+        }
 		return rawMaterialNamesList;
 	}
 
@@ -456,6 +462,11 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 			supplierNamesList.add(supplierEntity.getSupplierId());
 		}
 
+		if(supplierEntityObject.size()>0)
+            logger.info(Constants.SUPPLIER_IDS_FETCHED);
+        else {
+            logger.error(Constants.SUPPLIER_IDS_NOT_FETCHED);
+        }
 		return supplierNamesList;
 	}
 
@@ -468,6 +479,11 @@ public class RawMaterialServiceImpl implements RawMaterialService {
 			warehouseIdsList.add(warehouseEntity.getWarehouseId());
 		}
 
+		if(warehouseEntityObject.size()>0)
+            logger.info(Constants.WID_NAMES_FETCHED);
+        else {
+            logger.error(Constants.WID_NAMES_NOT_FETCHED);
+        }
 		return warehouseIdsList;
 	}
 
